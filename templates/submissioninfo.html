@@ -1,0 +1,63 @@
+{% extends "layou2.html" %}
+{% block content %}
+    <style>
+        h1, h2, h3, h4, h5, h6 {
+            color: white
+        }
+        a {
+            color: white
+        }
+        p {
+            color: white
+        }
+        label {
+            color: white
+        }
+        body {
+             background-image: url("static/assets/img/portfolio/space.png");
+             background-color: #64D4FF;
+        }
+    </style>
+    <center>
+         <form class = "needs-validation" method = "POST">
+        {{ read_form.hidden_tag() }}
+    <div class = "col-sm">
+    <h5>{{ read_form.area(class = "form-control form-control-lg") }}</h5>
+    </div>
+        <h6>Year: {{year}}</h6>
+        <br>
+        <br>
+     <div class = "col-md-6 mb-3">
+            <h5>Mark as Read?</h5>
+            {% if read_form.reading.errors %}
+              {{ read_form.reading(class = "read_form-control read_form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in read_form.reading.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ read_form.reading(class = "read_form-control read_form-control-lg")}}
+            {% endif %}
+        </div>
+        <br>
+        <br>
+        <div class = "form-group">
+                <h5>Post?</h5>
+            {% if read_form.posting.errors %}
+              {{ read_form.posting(class = "read_form-control read_form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in read_form.posting.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ read_form.posting(class = "read_form-control read_form-control-lg")}}
+            {% endif %}
+        </div>
+        <div class = "form-group">
+                {{ read_form.submit(class = "btn btn-outline-info")}}
+          </div>
+             </form>
+    </center>
+{% endblock content%}

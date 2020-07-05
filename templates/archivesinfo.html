@@ -1,0 +1,27 @@
+{% extends "layou2.html" %}
+{% block content %}
+    <style>
+        h1, h2, h3, h4, h5, h6 {
+            color: white
+        }
+        a {
+            color: white
+        }
+        p {
+            color: white
+        }
+        label {
+            color: white
+        }
+        body {
+             background-image: url("static/assets/img/portfolio/space.png");
+             background-color: #64D4FF;
+        }
+    </style>
+    <center>
+    <div class = "col-sm">
+    <h5>{{ form.area(class = "form-control form-control-lg") }}</h5>
+    </div>
+        <h6>Year: {{year}}</h6>
+    </center>
+{% endblock content%}
