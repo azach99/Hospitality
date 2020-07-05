@@ -15,11 +15,11 @@ app.config['SECRET_KEY'] = 'ej6swibjsk6920bj14jdzej79hfssr63fgbs'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///submissions.db'
-submissions_db = SQLAlchemy(app)
+#submissions_db = SQLAlchemy(app)
 db = SQLAlchemy(app)
-archives_db = SQLAlchemy(app)
-read_db = SQLAlchemy(app)
-post_db = SQLAlchemy(app)
+#archives_db = SQLAlchemy(app)
+#read_db = SQLAlchemy(app)
+#post_db = SQLAlchemy(app)
 
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
@@ -59,19 +59,36 @@ def make_user():
 
 @app.route("/login", methods = ['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
-        if ("speaking_admin" == str(form.username.data) and "jp_speaks_admin" == str(form.password.data)):
-            user = User.query.filter_by(username = "speaking_admin").first()
+        user = User.query.filter_by(email=form.email.data).first()
+        if (user and bcrypt.check_password_hash(user.password, form.password.data)):
             login_user(user)
-            sub_list = SubmissionData.query.all()
-            flash("Welcome Admin", "success")
-            return redirect(url_for("submissions"))
-            #return render_template("submissions.html", sub_list = sub_list)
+            flash('Login Successful', category="success")
+            return redirect(url_for('home'))
         else:
-            flash("Incorrect Credentials. Check username or password", "danger")
-            return redirect(url_for("login", form = form))
-    return render_template("login.html", form = form)
+            flash('Login Unsuccessful', category="danger")
+            return redirect(url_for('login'))
+    else:
+        return render_template('login.html', title="Login", form=form)
+
+
+@app.route("/register", methods = ['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        input_user = User(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data,
+                          username=form.username.data, password=hashed)
+        db.session.add(input_user)
+        db.session.commit()
+        user_list.append(input_user)
+        flash("Account Created for {}".format(form.username.data), 'success')
+        return redirect(url_for('login'))
+    else:
+        return render_template("registration.html", form = form)
 
 @app.route("/logout")
 def logout():
@@ -79,6 +96,7 @@ def logout():
     flash("Successfully logged out", "success")
     return (redirect(url_for("home")))
 
+'''
 @app.route("/submissions", methods = ['GET', 'POST'])
 def submissions():
     if (current_user.is_authenticated):
@@ -93,7 +111,10 @@ def submissions():
     else:
         flash("You do not have rights to access this page", "danger")
         return redirect(url_for("home"))
+'''
 
+
+'''
 class SubmissionForm(FlaskForm):
     submission = TextAreaField("Submission", validators = [Length(min = 2, max = 1000), DataRequired()], render_kw={"rows": 5, "cols": 0})
     year = StringField("Year", validators = [DataRequired()])
@@ -104,9 +125,11 @@ class ReadForm(FlaskForm):
     reading = SelectField("Mark as Read", choices = [("Select", "Select"), ("Yes", "Yes"), ("No", "No")])
     posting = SelectField("Post?", choices = [("Select", "Select"), ("Yes", "Yes"), ("No", "No")])
     submit = SubmitField("Submit")
+   '''
+
 
 class LoginForm(FlaskForm):
-    username = StringField("Email", validators = [DataRequired()])
+    email = StringField("Email", validators = [DataRequired()])
     password = PasswordField("Password", validators = [DataRequired()])
     submit = SubmitField("Submit")
 
@@ -119,6 +142,7 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators = [DataRequired(), Email()])
     password = PasswordField('Password', validators = [DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators = [DataRequired(), EqualTo('password')])
+    kind = SelectField('Applicant', validators = [DataRequired()], choices = [("Select", "Select"), ("Big", "Big"), ("Little", "Little")])
     submit = SubmitField('Register')
 
     def validate_username(self, username):
@@ -131,6 +155,7 @@ class RegistrationForm(FlaskForm):
         if email_string:
             raise ValidationError('That email is taken. Please choose a different one.')
 
+'''
 @app.route("/submissioninfo/<id>", methods = ['GET', 'POST'])
 def submission_info(id):
     submission = SubmissionData.query.filter_by(key = id).first()
@@ -218,7 +243,7 @@ class PostData(post_db.Model):
     submission = post_db.Column(post_db.String(3000))
     year = post_db.Column(post_db.String(100))
     key = post_db.Column(post_db.String(200))
-
+'''
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
@@ -226,6 +251,7 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String(30))
     username = db.Column(db.String(20))
     email = db.Column(db.String(120))
+    kind = db.Column(db.String(120))
     password = db.Column(db.String(60))
 
     def __repr__(self):

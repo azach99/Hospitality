@@ -4,21 +4,21 @@
     <h1>Login Form</h1>
     <form class = "needs-validation" method = "POST">
         {{ form.hidden_tag() }}
-        <div class="col-md-3 mb-3">
+        <div class="col-md-7 mb-3">
           <label for="exampleFormControlTextarea1">Email</label>
           <!--<textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>-->
-            {% if form.username.errors %}
-                {{ form.username(class = "form-control form-control-lg is-invalid") }}
+            {% if form.email.errors %}
+                {{ form.email(class = "form-control form-control-lg is-invalid") }}
                 <div class = "invalid-feedback">
-                    {% for error in form.username.errors %}
+                    {% for error in form.email.errors %}
                         <span> {{ error }}</span>
                     {% endfor %}
                 </div>
             {% else %}
-                {{ form.username(class = "form-control form-control-lg") }}
+                {{ form.email(class = "form-control form-control-lg") }}
             {% endif %}
         </div>
-        <div class="col-md-3 mb-3">
+        <div class="col-md-7 mb-3">
           <label for="exampleFormControlTextarea1">Password</label>
           <!--<textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>-->
             {% if form.password.errors %}
