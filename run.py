@@ -13,14 +13,7 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ej6swibjsk6920bj14jdzej79hfssr63fgbs'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///submissions.db'
-#submissions_db = SQLAlchemy(app)
 db = SQLAlchemy(app)
-#archives_db = SQLAlchemy(app)
-#read_db = SQLAlchemy(app)
-#post_db = SQLAlchemy(app)
-
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
@@ -96,43 +89,12 @@ def logout():
     flash("Successfully logged out", "success")
     return (redirect(url_for("home")))
 
-'''
-@app.route("/submissions", methods = ['GET', 'POST'])
-def submissions():
-    if (current_user.is_authenticated):
-        sub_list = SubmissionData.query.all()
-        key_list = []
-        for item in ReadData.query.all():
-            key_list.append(item.key)
-        key_post_list = []
-        for item in PostData.query.all():
-            key_post_list.append(item.key)
-        return render_template("submissions.html", sub_list = sub_list, key_list = key_list, key_post_list = key_post_list)
-    else:
-        flash("You do not have rights to access this page", "danger")
-        return redirect(url_for("home"))
-'''
-
-
-'''
-class SubmissionForm(FlaskForm):
-    submission = TextAreaField("Submission", validators = [Length(min = 2, max = 1000), DataRequired()], render_kw={"rows": 5, "cols": 0})
-    year = StringField("Year", validators = [DataRequired()])
-    submit = SubmitField("Submit")
-
-class ReadForm(FlaskForm):
-    area = TextAreaField("Submission", render_kw={"rows": 8, "cols": 0})
-    reading = SelectField("Mark as Read", choices = [("Select", "Select"), ("Yes", "Yes"), ("No", "No")])
-    posting = SelectField("Post?", choices = [("Select", "Select"), ("Yes", "Yes"), ("No", "No")])
-    submit = SubmitField("Submit")
-   '''
 
 
 class LoginForm(FlaskForm):
     email = StringField("Email", validators = [DataRequired()])
     password = PasswordField("Password", validators = [DataRequired()])
     submit = SubmitField("Submit")
-
 
 
 class RegistrationForm(FlaskForm):
@@ -155,95 +117,35 @@ class RegistrationForm(FlaskForm):
         if email_string:
             raise ValidationError('That email is taken. Please choose a different one.')
 
-'''
-@app.route("/submissioninfo/<id>", methods = ['GET', 'POST'])
-def submission_info(id):
-    submission = SubmissionData.query.filter_by(key = id).first()
-    year = submission.year
-    read_form = ReadForm()
-    form = SubForm()
-    read_form.area.data = submission.submission
-    read_id_list = []
-    post_id_list = []
-    for item in ReadData.query.all():
-        read_id_list.append(item.key)
-    for item in PostData.query.all():
-        post_id_list.append(item)
-    if (read_form.validate_on_submit()):
-        flash("Success", "success")
-        if(str(read_form.reading.data) == str("Yes")):
-            if (id not in read_id_list):
-                read = ReadData(id = submission.id, submission = submission.submission, year = submission.year, key = submission.key)
-                read_db.session.add(read)
-                read_db.session.commit()
-                return redirect(url_for("submissions"))
-        if (str(read_form.posting.data) == str("Yes")):
-            if (id not in post_id_list):
-                post = PostData(id = submission.id, submission = submission.submission, year = submission.year, key = submission.key)
-                post_db.session.add(post)
-                post_db.session.commit()
-                return redirect(url_for("submissions"))
-    return render_template("submissioninfo.html", form = form, year = year, read_form = read_form)
+class LittleForm(FlaskForm):
+    name = StringField("Name", validators = [DataRequired(), Length(min = 2, max = 100)])
+    grade = SelectField("Grade", validators = [DataRequired()], choices = [("Select", "Select"), ("Freshmen", "Freshmen"), ("Sophomore", "Sophomore"), ("Junior", "Junior"), ("Senior", "Senior"), ("Super Senior", "Super Senior")])
+    email = StringField("Email", validators = [DataRequired(), Email()])
+    phone = StringField("Phone Number", validators = [DataRequired(), Length(min = 1, max = 20)])
+    room_phone = StringField("Roommate's Phone", validators = [DataRequired(), Length(min = 1, max = 20)])
+    gender = SelectField("Gender", validators = [DataRequired()], choices = [("Select", "Select"), ("Male", "Male"), ("Female", "Female"), ("Other", "Other")])
+    birthday = StringField("Birthday", validators = [DataRequired(), Length(min = 2, max = 30)])
+    birthplace = StringField("Birthplace/Hometown", validators = [DataRequired()])
+    vt_address = StringField("VT Address", validators = [DataRequired(), Length(min = 2, max = 150)])
+    major = StringField("Major(s)/Minor(s)", validators = [DataRequired(), Length(min = 2, max = 200)])
+    one = TextAreaField("Do you have any preference for an Ate [female Big] or a Kuya [male Big]?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    two = TextAreaField("What is/are your favorite food(s)/drink(s)", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    three = TextAreaField("Do you have any allergies?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    four = TextAreaField("Do you prefer to hang out in big groups or small groups?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    five = TextAreaField("What extracurricular activities are you currently involved in?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    six = TextAreaField("What are your favorite movies/TV shows?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    seven = TextAreaField("What is your favorite song/artist/music genre?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    eight = TextAreaField("What are your hobbies and talents?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    nine = TextAreaField("What is your biggest pet peeve?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    ten = TextAreaField("What is your favorite YouTube video?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    eleven = TextAreaField("What would you do with $1,000?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    twelve = TextAreaField("What is your dream job/passion?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    thirteen = TextAreaField("If you had a drink named after you, what would be in it?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    fourteen = TextAreaField("What qualities do you look for in a friend?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    sixteen = TextAreaField("What is your favorite color?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    seventeen = TextAreaField("Are you a morning or night person?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    eighteen = TextAreaField("What is your guilty pleasure?", validators = [DataRequired(), Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
 
-@app.route("/archive/<id>", methods = ['GET', 'POST'])
-def archive_post(id):
-    submission = SubmissionData.query.filter_by(key = id).first()
-    input_archive = ArchivesData(id = submission.id, submission = submission.submission, year = submission.year, key = submission.key)
-    archives_db.session.add(input_archive)
-    archives_db.session.commit()
-    SubmissionData.query.filter_by(key = "{}".format(submission.key)).delete()
-    submissions_db.session.commit()
-    return redirect(url_for("submissions"))
-
-@app.route("/archives", methods = ['GET', 'POST'])
-def archives():
-    if (current_user.is_authenticated):
-        archive_list = ArchivesData.query.all()
-        return render_template("archives.html", sub_list = archive_list)
-    else:
-        flash("You do not have rights to access this page", "danger")
-        return redirect(url_for("home"))
-
-@app.route("/archivesinfo/<id>", methods = ['GET', 'POST'])
-def archives_info(id):
-    submission = ArchivesData.query.filter_by(key = id).first()
-    year = submission.year
-    form = SubForm()
-    form.area.data = submission.submission
-    return render_template("archivesinfo.html", form = form, year = year)
-
-
-
-class SubForm(FlaskForm):
-    area = TextAreaField("Submission", render_kw={"rows": 8, "cols": 0})
-
-class SubmissionData(submissions_db.Model):
-    id = submissions_db.Column(submissions_db.Integer, primary_key = True)
-    submission = submissions_db.Column(submissions_db.String(3000))
-    year = submissions_db.Column(submissions_db.String(100))
-    key = submissions_db.Column(submissions_db.String(200))
-
-    def __repr__(self):
-        return "Submission({} {} {})".format(self.submission, self.year, self.key)
-
-class ArchivesData(archives_db.Model):
-    id = archives_db.Column(archives_db.Integer, primary_key = True)
-    submission = archives_db.Column(archives_db.String(3000))
-    year = archives_db.Column(archives_db.String(100))
-    key = archives_db.Column(archives_db.String(200))
-
-class ReadData(read_db.Model):
-    id = read_db.Column(read_db.Integer, primary_key=True)
-    submission = read_db.Column(read_db.String(3000))
-    year = read_db.Column(read_db.String(100))
-    key = read_db.Column(read_db.String(200))
-
-class PostData(post_db.Model):
-    id = post_db.Column(post_db.Integer, primary_key=True)
-    submission = post_db.Column(post_db.String(3000))
-    year = post_db.Column(post_db.String(100))
-    key = post_db.Column(post_db.String(200))
-'''
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
