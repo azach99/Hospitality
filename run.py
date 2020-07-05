@@ -50,15 +50,7 @@ def load_user(user_id):
 
 @app.route("/", methods = ['GET', 'POST'])
 def home():
-    form = SubmissionForm()
-    if form.validate_on_submit():
-        key = secrets.token_hex(16)
-        input_sub = SubmissionData(submission = form.submission.data, year = form.year.data, key = key)
-        submissions_db.session.add(input_sub)
-        submissions_db.session.commit()
-        flash("Your submission has been entered", "success")
-        return redirect(url_for("home"))
-    return render_template("home.html", form = form)
+    return render_template("home.html")
 
 def make_user():
     input_user = User(first_name = "first", last_name = "last", email = "speaks@gmail.com", username = "speaking_admin", password = "jp_speaks_admin")
@@ -114,7 +106,7 @@ class ReadForm(FlaskForm):
     submit = SubmitField("Submit")
 
 class LoginForm(FlaskForm):
-    username = StringField("Username", validators = [DataRequired()])
+    username = StringField("Email", validators = [DataRequired()])
     password = PasswordField("Password", validators = [DataRequired()])
     submit = SubmitField("Submit")
 
