@@ -75,7 +75,7 @@ def register():
     if form.validate_on_submit():
         hashed = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         input_user = User(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data,
-                          username=form.username.data, password=hashed)
+                          username=form.username.data, password=hashed, kind = form.kind.data)
         db.session.add(input_user)
         db.session.commit()
         flash("Account Created for {}".format(form.username.data), 'success')
@@ -360,7 +360,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60))
 
     def __repr__(self):
-        return "User({}, {}, {}, {})".format(self.first_name, self.last_name, self.username, self.email)
+        return "User({}, {}, {}, {}, {})".format(self.first_name, self.last_name, self.username, self.email, self.kind)
 
     '''new'''
     def get_reset_token(self, expires_sec = 3600):

@@ -58,7 +58,17 @@
                 <li class="nav-item">
                   <a class="nav-link" href="/logout">Logout</a>
               </li>
+                {% if current_user.kind == "Big" %}
+                <li class="nav-item">
+                  <a class="nav-link" href="/bigapplication">Big Application</a>
+              </li>
+            {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="/littleapplication">Little Application</a>
+              </li>
+            {% endif%}
             {% endif %}
+
 
         </ul>
       </div>
