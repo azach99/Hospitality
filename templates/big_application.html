@@ -1,0 +1,451 @@
+{% extends "layou2.html" %}
+{% block content %}
+  <center>
+    <h1>Big Application</h1>
+    <div class="col-md-8 order-md-1">
+      <!--<h4 class="mb-3">Billing address</h4>-->
+      <form class="needs-validation" method = "POST">
+        {{ form.hidden_tag() }}
+        <div class="row">
+          <div class = "col-md-12 mb-3">
+            {{ form.name.label(class = "form-control-label") }}
+            {% if form.name.errors %}
+              {{ form.name(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.name.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.name(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+
+          <div class = "col-md-12 mb-3">
+            {{ form.grade.label(class = "form-control-label") }}
+            {% if form.grade.errors %}
+              {{ form.grade(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.grade.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.grade(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+          <div class = "col-md-12 mb-3">
+            {{ form.email.label(class = "form-control-label") }}
+            {% if form.email.errors %}
+              {{ form.email(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.email.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.email(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+          <div class = "col-md-12 mb-3">
+            {{ form.phone.label(class = "form-control-label") }}
+            {% if form.phone.errors %}
+              {{ form.phone(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.phone.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.phone(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+          <div class = "col-md-12 mb-3">
+            {{ form.gender.label(class = "form-control-label") }}
+            {% if form.gender.errors %}
+              {{ form.gender(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.gender.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.gender(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.birthplace.label(class = "form-control-label") }}
+            {% if form.birthplace.errors %}
+              {{ form.birthplace(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.birthplace.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.birthplace(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.vt_address.label(class = "form-control-label") }}
+            {% if form.vt_address.errors %}
+              {{ form.vt_address(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.vt_address.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.vt_address(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.major.label(class = "form-control-label") }}
+            {% if form.major.errors %}
+              {{ form.major(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.major.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.major(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.one.label(class = "form-control-label") }}
+            {% if form.one.errors %}
+              {{ form.one(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.one.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.one(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.two.label(class = "form-control-label") }}
+            {% if form.two.errors %}
+              {{ form.two(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.two.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.two(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.three.label(class = "form-control-label") }}
+            {% if form.three.errors %}
+              {{ form.three(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.three.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.three(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.four.label(class = "form-control-label") }}
+            {% if form.four.errors %}
+              {{ form.four(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.four.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.four(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+
+
+            <div class = "col-md-12 mb-3">
+            {{ form.five.label(class = "form-control-label") }}
+            {% if form.five.errors %}
+              {{ form.five(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.five.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.five(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.six.label(class = "form-control-label") }}
+            {% if form.six.errors %}
+              {{ form.six(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.six.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.six(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.seven.label(class = "form-control-label") }}
+            {% if form.seven.errors %}
+              {{ form.seven(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.seven.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.seven(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.eight.label(class = "form-control-label") }}
+            {% if form.eight.errors %}
+              {{ form.eight(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.eight.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.eight(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+
+
+
+            <div class = "col-md-12 mb-3">
+            {{ form.ten.label(class = "form-control-label") }}
+            {% if form.ten.errors %}
+              {{ form.ten(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.ten.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.ten(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.eleven.label(class = "form-control-label") }}
+            {% if form.eleven.errors %}
+              {{ form.eleven(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.eleven.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.eleven(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.twelve.label(class = "form-control-label") }}
+            {% if form.twelve.errors %}
+              {{ form.twelve(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.twelve.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.twelve(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+
+
+            <div class = "col-md-12 mb-3">
+            {{ form.thirteen.label(class = "form-control-label") }}
+            {% if form.thirteen.errors %}
+              {{ form.thirteen(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.thirteen.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.thirteen(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.fourteen.label(class = "form-control-label") }}
+            {% if form.fourteen.errors %}
+              {{ form.fourteen(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.fourteen.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.fourteen(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.fifteen.label(class = "form-control-label") }}
+            {% if form.fifteen.errors %}
+              {{ form.fifteen(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.fifteen.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.fifteen(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.sixteen.label(class = "form-control-label") }}
+            {% if form.sixteen.errors %}
+              {{ form.sixteen(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.sixteen.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.sixteen(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+
+            <div class = "col-md-12 mb-3">
+            {{ form.eighteen.label(class = "form-control-label") }}
+            {% if form.eighteen.errors %}
+              {{ form.eighteen(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.eighteen.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.eighteen(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <h6>Which activities would you prefer to do with your Ate/Kuya?
+                (Please rank them 1-6, 1 = most preferred, 6 = leastpreferred)</h6>
+
+
+
+
+            <div class = "col-md-12 mb-3">
+            {{ form.a_19.label(class = "form-control-label") }}
+            {% if form.a_19.errors %}
+              {{ form.a_19(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.a_19.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.a_19(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.b_19.label(class = "form-control-label") }}
+            {% if form.b_19.errors %}
+              {{ form.b_19(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.b_19.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.b_19(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.c_19.label(class = "form-control-label") }}
+            {% if form.c_19.errors %}
+              {{ form.c_19(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.c_19.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.c_19(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.d_19.label(class = "form-control-label") }}
+            {% if form.d_19.errors %}
+              {{ form.d_19(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.d_19.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.d_19(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.e_19.label(class = "form-control-label") }}
+            {% if form.e_19.errors %}
+              {{ form.e_19(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.e_19.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.e_19(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.f_19.label(class = "form-control-label") }}
+            {% if form.f_19.errors %}
+              {{ form.f_19(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.f_19.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.f_19(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+
+
+
+            <div class = "col-md-12 mb-3">
+            {{ form.twenty.label(class = "form-control-label") }}
+            {% if form.twenty.errors %}
+              {{ form.twenty(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.twenty.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.twenty(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+            <div class = "col-md-12 mb-3">
+            {{ form.twentyone.label(class = "form-control-label") }}
+            {% if form.twentyone.errors %}
+              {{ form.twentyone(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.twentyone.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.twentyone(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
+
+          <div class = "col-md-12 mb-3">
+            {{ form.submit(class = "btn btn-outline-info")}}
+          </div>
+      </form>
+      </div>
+    </center>
+{% endblock content %}

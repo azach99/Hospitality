@@ -83,6 +83,24 @@ def register():
     else:
         return render_template("registration.html", form = form)
 
+@app.route("/littleapplication", methods = ['GET', 'POST'])
+def little_apply():
+    form = LittleForm()
+    if form.validate_on_submit():
+        flash("Saved Application for {}".format(form.name.data), 'success')
+        return redirect(url_for('home'))
+    else:
+        return render_template("little_application.html", form = form)
+
+@app.route("/bigapplication", methods = ['GET', 'POST'])
+def big_apply():
+    form = BigForm()
+    if form.validate_on_submit():
+        flash("Saved Application for {}".format(form.name.data), 'success')
+        return redirect(url_for('home'))
+    else:
+        return render_template("big_application.html", form = form)
+
 @app.route("/logout")
 def logout():
     logout_user()
@@ -118,45 +136,112 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('That email is taken. Please choose a different one.')
 
 class LittleForm(FlaskForm):
-    name = StringField("Name", validators = [Length(min = 2, max = 100)])
-    grade = SelectField("Grade", validators = [Length(min = 2, max = 100)], choices = [("Select", "Select"), ("Freshmen", "Freshmen"), ("Sophomore", "Sophomore"), ("Junior", "Junior"), ("Senior", "Senior"), ("Super Senior", "Super Senior")])
+    name = StringField("Name", validators = [Length(min = 0, max = 100)])
+    grade = SelectField("Grade", validators = [Length(min = 0, max = 100)], choices = [("Select", "Select"), ("Freshmen", "Freshmen"), ("Sophomore", "Sophomore"), ("Junior", "Junior"), ("Senior", "Senior"), ("Super Senior", "Super Senior")])
     email = StringField("Email", validators = [Email()])
-    phone = StringField("Phone Number", validators = [Length(min = 1, max = 20)])
-    room_phone = StringField("Roommate's Phone", validators = [Length(min = 1, max = 20)])
-    gender = SelectField("Gender", validators = [Length(min = 2, max = 100)], choices = [("Select", "Select"), ("Male", "Male"), ("Female", "Female"), ("Other", "Other")])
-    birthday = StringField("Birthday", validators = [Length(min = 2, max = 30)])
-    birthplace = StringField("Birthplace/Hometown", validators = [Length(min = 2, max = 100)])
-    vt_address = StringField("VT Address", validators = [Length(min = 2, max = 150)])
-    major = StringField("Major(s)/Minor(s)", validators = [Length(min = 2, max = 200)])
-    one = TextAreaField("Do you have any preference for an Ate [female Big] or a Kuya [male Big]?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    two = TextAreaField("What is/are your favorite food(s)/drink(s)", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    three = TextAreaField("Do you have any allergies?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    four = TextAreaField("Do you prefer to hang out in big groups or small groups?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    five = TextAreaField("What extracurricular activities are you currently involved in?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    six = TextAreaField("What are your favorite movies/TV shows?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    seven = TextAreaField("What is your favorite song/artist/music genre?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    eight = TextAreaField("What are your hobbies and talents?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    nine = TextAreaField("What is your biggest pet peeve?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    ten = TextAreaField("What is your favorite YouTube video?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    eleven = TextAreaField("What would you do with $1,000?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    twelve = TextAreaField("What is your dream job/passion?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    thirteen = TextAreaField("If you had a drink named after you, what would be in it?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    fourteen = TextAreaField("What qualities do you look for in a friend?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    sixteen = TextAreaField("What is your favorite color?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    seventeen = TextAreaField("Are you a morning or night person?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    eighteen = TextAreaField("What is your guilty pleasure?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    a_19 = SelectField("1", validators = [Length(min = 2, max = 50)], choices = [("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"), ("Play videogames", "Play videogames"), ("Going out on the weekend", "Going out on the weekend"), ("Workout/Play sports", "Workout/Play sports"), ("Hang out and chills", "Hang out and chills")])
-    b_19 = SelectField("2", validators = [Length(min = 2, max = 50)], choices = [("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"), ("Play videogames", "Play videogames"), ("Going out on the weekend", "Going out on the weekend"), ("Workout/Play sports", "Workout/Play sports"), ("Hang out and chills", "Hang out and chills")])
-    c_19 = SelectField("3", validators = [Length(min = 2, max = 50)], choices = [("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"), ("Play videogames", "Play videogames"), ("Going out on the weekend", "Going out on the weekend"), ("Workout/Play sports", "Workout/Play sports"), ("Hang out and chills", "Hang out and chills")])
-    d_19 = SelectField("4", validators = [Length(min = 2, max = 50)], choices = [("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"), ("Play videogames", "Play videogames"), ("Going out on the weekend", "Going out on the weekend"), ("Workout/Play sports", "Workout/Play sports"), ("Hang out and chills", "Hang out and chills")])
-    e_19 = SelectField("5", validators = [Length(min = 2, max = 50)], choices = [("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"), ("Play videogames", "Play videogames"), ("Going out on the weekend", "Going out on the weekend"), ("Workout/Play sports", "Workout/Play sports"), ("Hang out and chills", "Hang out and chills")])
-    f_19 = SelectField("6", validators = [Length(min = 2, max = 50)], choices = [("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"), ("Play videogames", "Play videogames"), ("Going out on the weekend", "Going out on the weekend"), ("Workout/Play sports", "Workout/Play sports"), ("Hang out and chills", "Hang out and chills")])
-    twenty = TextAreaField("Why do you want an Ate/Kuya", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    twentyone = TextAreaField("What is your class schedule? Include location/room numbers and class", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    twentytwo = TextAreaField("Is there anything else you want to share about yourself?", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
-    twentythree = TextAreaField("Provide a message to your future big!", validators = [Length(min = 2, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    phone = StringField("Phone Number", validators = [Length(min = 0, max = 20)])
+    room_phone = StringField("Roommate's Phone", validators = [Length(min = 0, max = 20)])
+    gender = SelectField("Gender", validators = [Length(min = 0, max = 100)], choices = [("Select", "Select"), ("Male", "Male"), ("Female", "Female"), ("Other", "Other")])
+    birthday = StringField("Birthday", validators = [Length(min = 0, max = 30)])
+    birthplace = StringField("Birthplace/Hometown", validators = [Length(min = 0, max = 100)])
+    vt_address = StringField("VT Address", validators = [Length(min = 0, max = 150)])
+    major = StringField("Major(s)/Minor(s)", validators = [Length(min = 0, max = 200)])
+    one = TextAreaField("Do you have any preference for an Ate [female Big] or a Kuya [male Big]?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    two = TextAreaField("What is/are your favorite food(s)/drink(s)", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    three = TextAreaField("Do you have any allergies?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    four = TextAreaField("Do you prefer to hang out in big groups or small groups?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    five = TextAreaField("What extracurricular activities are you currently involved in?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    six = TextAreaField("What are your favorite movies/TV shows?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    seven = TextAreaField("What is your favorite song/artist/music genre?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    eight = TextAreaField("What are your hobbies and talents?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    nine = TextAreaField("What is your biggest pet peeve?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    ten = TextAreaField("What is your favorite YouTube video?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    eleven = TextAreaField("What would you do with $1,000?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    twelve = TextAreaField("What is your dream job/passion?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    thirteen = TextAreaField("If you had a drink named after you, what would be in it?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    fourteen = TextAreaField("What qualities do you look for in a friend?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    sixteen = TextAreaField("What is your favorite color?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    seventeen = TextAreaField("Are you a morning or night person?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    eighteen = TextAreaField("What is your guilty pleasure?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    a_19 = SelectField("1", validators = [Length(min = 0, max = 50)], choices = [("Select", "Select"), ("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"), ("Play videogames", "Play videogames"), ("Going out on the weekend", "Going out on the weekend"), ("Workout/Play sports", "Workout/Play sports"), ("Hang out and chills", "Hang out and chills")])
+    b_19 = SelectField("2", validators = [Length(min = 0, max = 50)], choices = [("Select", "Select"), ("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"), ("Play videogames", "Play videogames"), ("Going out on the weekend", "Going out on the weekend"), ("Workout/Play sports", "Workout/Play sports"), ("Hang out and chills", "Hang out and chills")])
+    c_19 = SelectField("3", validators = [Length(min = 0, max = 50)], choices = [("Select", "Select"), ("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"), ("Play videogames", "Play videogames"), ("Going out on the weekend", "Going out on the weekend"), ("Workout/Play sports", "Workout/Play sports"), ("Hang out and chills", "Hang out and chills")])
+    d_19 = SelectField("4", validators = [Length(min = 0, max = 50)], choices = [("Select", "Select"), ("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"), ("Play videogames", "Play videogames"), ("Going out on the weekend", "Going out on the weekend"), ("Workout/Play sports", "Workout/Play sports"), ("Hang out and chills", "Hang out and chills")])
+    e_19 = SelectField("5", validators = [Length(min = 0, max = 50)], choices = [("Select", "Select"), ("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"), ("Play videogames", "Play videogames"), ("Going out on the weekend", "Going out on the weekend"), ("Workout/Play sports", "Workout/Play sports"), ("Hang out and chills", "Hang out and chills")])
+    f_19 = SelectField("6", validators = [Length(min = 0, max = 50)], choices = [("Select", "Select"), ("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"), ("Play videogames", "Play videogames"), ("Going out on the weekend", "Going out on the weekend"), ("Workout/Play sports", "Workout/Play sports"), ("Hang out and chills", "Hang out and chills")])
+    twenty = TextAreaField("Why do you want an Ate/Kuya", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    twentyone = TextAreaField("What is your class schedule? Include location/room numbers and class", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    twentytwo = TextAreaField("Is there anything else you want to share about yourself?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    twentythree = TextAreaField("Provide a message to your future big!", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
     submit = SubmitField("Save and/or Submit")
 
+class BigForm(FlaskForm):
+    name = StringField("Name", validators=[Length(min = 0, max=100)])
+    grade = SelectField("Grade", validators=[Length(min = 0, max=100)],
+                        choices=[("Select", "Select"), ("Freshmen", "Freshmen"), ("Sophomore", "Sophomore"),
+                                 ("Junior", "Junior"), ("Senior", "Senior"), ("Super Senior", "Super Senior")])
+    email = StringField("Email", validators=[Email()])
+    phone = StringField("Phone Number", validators=[Length(min=0, max=20)])
+    gender = SelectField("Gender", validators=[Length(min = 0, max=100)],
+                         choices=[("Select", "Select"), ("Male", "Male"), ("Female", "Female"), ("Other", "Other")])
+    birthplace = StringField("Birthplace/Hometown", validators=[Length(min = 0, max=100)])
+    vt_address = StringField("VT Address", validators=[Length(min = 0, max=150)])
+    major = StringField("Major(s)/Minor(s)", validators=[Length(min = 0, max=200)])
+    one = SelectField("Do you have any gender preference for a male or female little?", validators = [Length(min = 0, max = 50)], choices = [("Select", "Select"), ("Male", "Male"), ("Female", "Female"), ("None", "None")])
+    two = SelectField("Do you mind having more than one little?", validators = [Length(min = 0, max = 100)], choices = [("Select", "Select"), ("Yes", "Yes"), ("No", "No")])
+    three = SelectField("Do you prefer to hang out in big groups or small groups", validators = [Length(min = 0, max = 100)], choices = [("Select", "Select"), ("Big groups", "Big groups"), ("Small groups", "Small groups")])
+    four = TextAreaField("What extracurricular activities are you currently involved in?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    five = TextAreaField("What are your favorite movies/TV shows?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    six = TextAreaField("What is your favorite song/artist/music genre?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    seven = TextAreaField("What are your hobbies and talents", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    eight = TextAreaField("What is your biggest pet peeve?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    ten = TextAreaField("What is your favorite YouTube video?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    eleven = TextAreaField("What would you do with $1,000", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    twelve = TextAreaField("If you had a drink named after you, what would be in it and why?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    thirteen = TextAreaField("What is your dream job/passion?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    fourteen = TextAreaField("What qualities do you look for in a friend?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    fifteen = TextAreaField("Are you a morning or night person?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    sixteen = TextAreaField("What is your guilty pleasure?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    a_19 = SelectField("1", validators=[Length(min=2, max=50)],
+                       choices=[("Select", "Select"), ("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"),
+                                ("Play videogames", "Play videogames"),
+                                ("Going out on the weekend", "Going out on the weekend"),
+                                ("Workout/Play sports", "Workout/Play sports"),
+                                ("Hang out and chills", "Hang out and chills")])
+    b_19 = SelectField("2", validators=[Length(min=2, max=50)],
+                       choices=[("Select", "Select"), ("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"),
+                                ("Play videogames", "Play videogames"),
+                                ("Going out on the weekend", "Going out on the weekend"),
+                                ("Workout/Play sports", "Workout/Play sports"),
+                                ("Hang out and chills", "Hang out and chills")])
+    c_19 = SelectField("3", validators=[Length(min=2, max=50)],
+                       choices=[("Select", "Select"), ("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"),
+                                ("Play videogames", "Play videogames"),
+                                ("Going out on the weekend", "Going out on the weekend"),
+                                ("Workout/Play sports", "Workout/Play sports"),
+                                ("Hang out and chills", "Hang out and chills")])
+    d_19 = SelectField("4", validators=[Length(min=2, max=50)],
+                       choices=[("Select", "Select"), ("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"),
+                                ("Play videogames", "Play videogames"),
+                                ("Going out on the weekend", "Going out on the weekend"),
+                                ("Workout/Play sports", "Workout/Play sports"),
+                                ("Hang out and chills", "Hang out and chills")])
+    e_19 = SelectField("5", validators=[Length(min=2, max=50)],
+                       choices=[("Select", "Select"), ("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"),
+                                ("Play videogames", "Play videogames"),
+                                ("Going out on the weekend", "Going out on the weekend"),
+                                ("Workout/Play sports", "Workout/Play sports"),
+                                ("Hang out and chills", "Hang out and chills")])
+    f_19 = SelectField("6", validators=[Length(min=2, max=50)],
+                       choices=[("Select", "Select"), ("Have lunch/dinner", "Have lunch/dinner"), ("Do homework", "Do homework"),
+                                ("Play videogames", "Play videogames"),
+                                ("Going out on the weekend", "Going out on the weekend"),
+                                ("Workout/Play sports", "Workout/Play sports"),
+                                ("Hang out and chills", "Hang out and chills")])
+    eighteen = TextAreaField("Why do you want a little?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    twenty = TextAreaField("What does being a big mean to you?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    twentyone = TextAreaField("Is there anything else you want to share about yourself?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    submit = SubmitField("Save and/or Submit")
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
