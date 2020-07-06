@@ -12,8 +12,16 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ej6swibjsk6920bj14jdzej79hfssr63fgbs'
+
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///little_data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///big_data.db'
 db = SQLAlchemy(app)
+little_db = SQLAlchemy(app)
+big_db = SQLAlchemy(app)
+
+
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
@@ -25,13 +33,6 @@ mail = Mail(app)
 confirmed = False
 
 
-user_list = []
-
-class Course():
-    def __init__(self, number, name, credits):
-        self.number = number
-        self.name = name
-        self.credits = credits
 
 
 
@@ -269,7 +270,80 @@ class User(db.Model, UserMixin):
             return None
         return User.query.get(user_id)
 
+class LittleData(little_db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(50))
+    grade = db.Column(db.String(25))
+    email = db.Column(db.String(120))
+    phone = db.Column(db.String(20))
+    room_phone = db.Column(db.String(20))
+    gender = db.Column(db.String(20))
+    birthday = db.Column(db.String(30))
+    birthplace = db.Column(db.String(100))
+    vt_address = db.Column(db.String(150))
+    major = db.Column(db.String(200))
+    one = db.Column(db.String(1000))
+    two = db.Column(db.String(1000))
+    three = db.Column(db.String(1000))
+    four = db.Column(db.String(1000))
+    five = db.Column(db.String(1000))
+    six = db.Column(db.String(1000))
+    seven = db.Column(db.String(1000))
+    eight = db.Column(db.String(1000))
+    nine = db.Column(db.String(1000))
+    ten = db.Column(db.String(1000))
+    eleven = db.Column(db.String(1000))
+    twelve = db.Column(db.String(1000))
+    thirteen = db.Column(db.String(1000))
+    fourteen = db.Column(db.String(1000))
+    sixteen = db.Column(db.String(1000))
+    seventeen = db.Column(db.String(1000))
+    eighteen = db.Column(db.String(1000))
+    a_19 = db.Column(db.String(1000))
+    b_19 = db.Column(db.String(1000))
+    c_19 = db.Column(db.String(1000))
+    d_19 = db.Column(db.String(1000))
+    e_19 = db.Column(db.String(1000))
+    f_19 = db.Column(db.String(1000))
+    twenty = db.Column(db.String(1000))
+    twentyone = db.Column(db.String(1000))
+    twentytwo = db.Column(db.String(1000))
+    twentythree = db.Column(db.String(1000))
 
+class BigForm(big_db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(50))
+    grade = db.Column(db.String(25))
+    email = db.Column(db.String(120))
+    phone = db.Column(db.String(20))
+    gender = db.Column(db.String(20))
+    birthplace = db.Column(db.String(100))
+    vt_address = db.Column(db.String(150))
+    major = db.Column(db.String(200))
+    one = db.Column(db.String(1000))
+    two = db.Column(db.String(1000))
+    three = db.Column(db.String(1000))
+    four = db.Column(db.String(1000))
+    five = db.Column(db.String(1000))
+    six = db.Column(db.String(1000))
+    seven = db.Column(db.String(1000))
+    eight = db.Column(db.String(1000))
+    ten = db.Column(db.String(1000))
+    eleven = db.Column(db.String(1000))
+    twelve = db.Column(db.String(1000))
+    thirteen = db.Column(db.String(1000))
+    fourteen = db.Column(db.String(1000))
+    sixteen = db.Column(db.String(1000))
+    fifteen = db.Column(db.String(1000))
+    eighteen = db.Column(db.String(1000))
+    a_19 = db.Column(db.String(1000))
+    b_19 = db.Column(db.String(1000))
+    c_19 = db.Column(db.String(1000))
+    d_19 = db.Column(db.String(1000))
+    e_19 = db.Column(db.String(1000))
+    f_19 = db.Column(db.String(1000))
+    twenty = db.Column(db.String(1000))
+    twentyone = db.Column(db.String(1000))
 
 
 
