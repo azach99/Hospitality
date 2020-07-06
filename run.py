@@ -152,10 +152,60 @@ def little_apply():
 def big_apply():
     form = BigForm()
     if form.validate_on_submit():
+        '''filter the database by email, if it exists, delete that entry'''
+        q = BigData.query.filter_by(email=current_user.email).first()
+        if (q is not None):
+            BigData.query.filter_by(email=current_user.email).delete()
+        input_big = BigData(name = form.name.data, grade = form.grade.data, email = form.email.data,
+                            phone = form.phone.data, gender = form.gender.data, birthplace = form.birthplace.data,
+                            vt_address = form.vt_address.data, major = form.major.data, one = form.one.data, two = form.two.data,
+                            three = form.three.data, four = form.four.data, five = form.five.data, six = form.six.data,
+                            seven = form.seven.data, eight = form.eight.data, ten = form.ten.data,
+                            eleven = form.eleven.data, twelve = form.twelve.data, thirteen = form.thirteen.data,
+                            fourteen = form.thirteen.data, sixteen = form.sixteen.data, fifteen = form.fifteen.data,
+                            eighteen = form.eighteen.data, a_19 = form.a_19.data, b_19 = form.b_19.data, c_19 = form.c_19.data,
+                            d_19 = form.d_19.data, e_19 = form.e_19.data, f_19 = form.f_19.data, twenty = form.twenty.data,
+                            twentyone = form.twentyone.data)
+        big_db.session.add(input_big)
+        big_db.session.commit()
         flash("Saved Application for {}".format(form.name.data), 'success')
         return redirect(url_for('home'))
     else:
         '''if the current users email is in big_db, find that specific user and set the form fields to that users (credentials)'''
+        q = BigData.query.filter_by(email=current_user.email).first()
+        if (q is not None):
+            form.name.data = q.name
+            form.grade.data = q.grade
+            form.email.data = q.email
+            form.phone.data = q.phone
+            form.gender.data = q.gender
+            form.birthplace.data = q.birthplace
+            form.vt_address.data = q.vt_address
+            form.major.data = q.major
+            form.one.data = q.one
+            form.two.data = q.two
+            form.three.data = q.three
+            form.four.data = q.four
+            form.five.data = q.five
+            form.six.data = q.six
+            form.seven.data = q.seven
+            form.eight.data = q.eight
+            form.ten.data = q.ten
+            form.eleven.data = q.eleven
+            form.twelve.data = q.twelve
+            form.thirteen.data = q.thirteen
+            form.fourteen.data = q.fourteen
+            form.fifteen.data = q.fifteen
+            form.sixteen.data = q.sixteen
+            form.a_19.data = q.a_19
+            form.b_19.data = q.b_19
+            form.c_19.data = q.c_19
+            form.d_19.data = q.d_19
+            form.e_19.data = q.e_19
+            form.f_19.data = q.f_19
+            form.eighteen.data = q.eighteen
+            form.twenty.data = q.twenty
+            form.twentyone.data = q.twentyone
         return render_template("big_application.html", form = form)
 
 @app.route("/logout")
