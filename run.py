@@ -256,6 +256,15 @@ def little_view():
     form.twentythree.data = little_data.twentythree
     return render_template("littleview.html", little_data = little_data, form = form)
 
+@app.route("/profile", methods = ['GET', 'POST'])
+def profile():
+    form = ProfileForm()
+    if form.validate_on_submit():
+        flash("Updated Profile")
+        return redirect(url_for("home"))
+    else:
+        return render_template("profile.html", form = form)
+
 
 @app.route("/logout")
 def logout():
@@ -474,6 +483,20 @@ class LittleBoxForm(FlaskForm):
                               validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
     twentythree = TextAreaField("Provide a message to your future big!", validators=[Length(min=0, max=1000)],
                                 render_kw={"rows": 5, "cols": 0})
+
+class ProfileForm(FlaskForm):
+    name = StringField("Name", validators = [Length(min = 0, max = 50)])
+    username = StringField("Username", validators = [Length(min = 0, max = 50)])
+    bio = TextAreaField("Tell us about yourself", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
+    instagram = StringField("Instagram", validators = [Length(min = 0, max = 50)])
+    twitter = StringField("Twitter", validators=[Length(min=0, max=50)])
+    snapchat = StringField("Snapchat", validators = [Length(min = 0, max = 50)])
+    vt_email = StringField("Email", validators = [Length(min = 0, max = 50)])
+    kind = SelectField('Applicant', validators=[DataRequired()],
+                       choices=[("Select", "Select"), ("Big", "Big"), ("Little", "Little")])
+    gender = SelectField("Gender (will not be part of public profile)", validators = [Length(min = 0, max = 100)], choices = [("Select", "Select"), ("Male", "Male"), ("Female", "Female"), ("Other", "Other")])
+    submit = SubmitField("Save and/or Submit")
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
