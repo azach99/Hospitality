@@ -78,7 +78,6 @@ def register():
                           username=form.username.data, password=hashed)
         db.session.add(input_user)
         db.session.commit()
-        user_list.append(input_user)
         flash("Account Created for {}".format(form.username.data), 'success')
         return redirect(url_for('login'))
     else:
@@ -88,9 +87,65 @@ def register():
 def little_apply():
     form = LittleForm()
     if form.validate_on_submit():
+        '''filter the database by email, if it exists, delete that entry'''
+        q = LittleData.query.filter_by(email = current_user.email).first()
+        if (q is not None):
+            LittleData.query.filter_by(email = current_user.email).delete()
+        input_little = LittleData(name = form.name.data, grade = form.grade.data, email = form.email.data,
+                                  phone = form.phone.data, room_phone = form.room_phone.data, gender = form.gender.data,
+                                  birthday = form.birthday.data, birthplace = form.birthplace.data, vt_address = form.vt_address.data,
+                                  major = form.major.data, one = form.one.data, two = form.two.data, three = form.three.data,
+                                  four = form.four.data, five = form.five.data, six = form.six.data, seven = form.seven.data,
+                                  eight = form.eight.data, nine = form.nine.data, ten = form.ten.data, eleven = form.eleven.data,
+                                  twelve = form.twelve.data, thirteen = form.thirteen.data, fourteen = form.fourteen.data, sixteen = form.sixteen.data,
+                                  seventeen = form.seventeen.data, eighteen = form.eighteen.data, a_19 = form.a_19.data, b_19 = form.b_19.data,
+                                  c_19 = form.c_19.data, d_19 = form.d_19.data, e_19 = form.e_19.data, f_19 = form.f_19.data, twenty = form.twenty.data,
+                                  twentyone = form.twentyone.data, twentytwo = form.twentytwo.data, twentythree = form.twentythree.data)
+        little_db.session.add(input_little)
+        little_db.session.commit()
         flash("Saved Application for {}".format(form.name.data), 'success')
         return redirect(url_for('home'))
     else:
+        '''if the current users email is in little_db, find that specific user and set the form fields to that users (credentials)'''
+        q = LittleData.query.filter_by(email = current_user.email).first()
+        if (q is not None):
+            form.name.data = q.name
+            form.grade.data = q.grade
+            form.email.data = q.email
+            form.phone.data = q.phone
+            form.room_phone.data = q.room_phone
+            form.gender.data = q.gender
+            form.birthday.data = q.birthday
+            form.birthplace.data = q.birthplace
+            form.vt_address.data = q.vt_address
+            form.major.data = q.major
+            form.one.data = q.one
+            form.two.data = q.two
+            form.three.data = q.three
+            form.four.data = q.four
+            form.five.data = q.five
+            form.six.data = q.six
+            form.seven.data = q.seven
+            form.eight.data = q.eight
+            form.nine.data = q.nine
+            form.ten.data = q.ten
+            form.eleven.data = q.eleven
+            form.twelve.data = q.twelve
+            form.thirteen.data = q.thirteen
+            form.fourteen.data = q.fourteen
+            form.sixteen.data = q.sixteen
+            form.seventeen.data = q.seventeen
+            form.eighteen.data = q.eighteen
+            form.a_19.data = q.a_19
+            form.b_19.data = q.b_19
+            form.c_19.data = q.c_19
+            form.d_19.data = q.d_19
+            form.e_19.data = q.e_19
+            form.f_19.data = q.f_19
+            form.twenty.data = q.twenty
+            form.twentyone.data = q.twentyone
+            form.twentytwo.data = q.twentytwo
+            form.twentythree.data = q.twentythree
         return render_template("little_application.html", form = form)
 
 @app.route("/bigapplication", methods = ['GET', 'POST'])
@@ -100,6 +155,7 @@ def big_apply():
         flash("Saved Application for {}".format(form.name.data), 'success')
         return redirect(url_for('home'))
     else:
+        '''if the current users email is in big_db, find that specific user and set the form fields to that users (credentials)'''
         return render_template("big_application.html", form = form)
 
 @app.route("/logout")
@@ -274,7 +330,7 @@ class LittleData(little_db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(50))
     grade = db.Column(db.String(25))
-    email = db.Column(db.String(120))
+    email = db.Column(db.String(120), unique = True)
     phone = db.Column(db.String(20))
     room_phone = db.Column(db.String(20))
     gender = db.Column(db.String(20))
@@ -310,11 +366,11 @@ class LittleData(little_db.Model):
     twentytwo = db.Column(db.String(1000))
     twentythree = db.Column(db.String(1000))
 
-class BigForm(big_db.Model):
+class BigData(big_db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(50))
     grade = db.Column(db.String(25))
-    email = db.Column(db.String(120))
+    email = db.Column(db.String(120), unique = True)
     phone = db.Column(db.String(20))
     gender = db.Column(db.String(20))
     birthplace = db.Column(db.String(100))
