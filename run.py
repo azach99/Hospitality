@@ -229,6 +229,34 @@ def big_view():
     form.twentyone.data = big_data.twentyone
     return render_template("bigview.html", big_data = big_data, form = form)
 
+@app.route("/littleview", methods = ['GET', 'MOST'])
+def little_view():
+    little_data = LittleData.query.filter_by(email = current_user.email).first()
+    form = LittleBoxForm()
+    form.one.data = little_data.one
+    form.two.data = little_data.two
+    form.three.data = little_data.three
+    form.four.data = little_data.four
+    form.five.data = little_data.five
+    form.six.data = little_data.six
+    form.seven.data = little_data.seven
+    form.eight.data = little_data.eight
+    form.nine.data = little_data.nine
+    form.ten.data = little_data.ten
+    form.eleven.data = little_data.eleven
+    form.twelve.data = little_data.twelve
+    form.thirteen.data = little_data.thirteen
+    form.fourteen.data = little_data.fourteen
+    form.sixteen.data = little_data.sixteen
+    form.seventeen.data = little_data.seventeen
+    form.eighteen.data = little_data.eighteen
+    form.twenty.data = little_data.twenty
+    form.twentyone.data = little_data.twentyone
+    form.twentytwo.data = little_data.twentytwo
+    form.twentythree.data = little_data.twentythree
+    return render_template("littleview.html", little_data = little_data, form = form)
+
+
 @app.route("/logout")
 def logout():
     logout_user()
@@ -402,6 +430,50 @@ class BigBoxForm(FlaskForm):
                            render_kw={"rows": 5, "cols": 0})
     twentyone = TextAreaField("Is there anything else you want to share about yourself?",
                               validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+
+class LittleBoxForm(FlaskForm):
+    one = TextAreaField("Do you have any preference for an Ate [female Big] or a Kuya [male Big]?",
+                        validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    two = TextAreaField("What is/are your favorite food(s)/drink(s)", validators=[Length(min=0, max=1000)],
+                        render_kw={"rows": 5, "cols": 0})
+    three = TextAreaField("Do you have any allergies?", validators=[Length(min=0, max=1000)],
+                          render_kw={"rows": 5, "cols": 0})
+    four = TextAreaField("Do you prefer to hang out in big groups or small groups?",
+                         validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    five = TextAreaField("What extracurricular activities are you currently involved in?",
+                         validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    six = TextAreaField("What are your favorite movies/TV shows?", validators=[Length(min=0, max=1000)],
+                        render_kw={"rows": 5, "cols": 0})
+    seven = TextAreaField("What is your favorite song/artist/music genre?", validators=[Length(min=0, max=1000)],
+                          render_kw={"rows": 5, "cols": 0})
+    eight = TextAreaField("What are your hobbies and talents?", validators=[Length(min=0, max=1000)],
+                          render_kw={"rows": 5, "cols": 0})
+    nine = TextAreaField("What is your biggest pet peeve?", validators=[Length(min=0, max=1000)],
+                         render_kw={"rows": 5, "cols": 0})
+    ten = TextAreaField("What is your favorite YouTube video?", validators=[Length(min=0, max=1000)],
+                        render_kw={"rows": 5, "cols": 0})
+    eleven = TextAreaField("What would you do with $1,000?", validators=[Length(min=0, max=1000)],
+                           render_kw={"rows": 5, "cols": 0})
+    twelve = TextAreaField("What is your dream job/passion?", validators=[Length(min=0, max=1000)],
+                           render_kw={"rows": 5, "cols": 0})
+    thirteen = TextAreaField("If you had a drink named after you, what would be in it?",
+                             validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    fourteen = TextAreaField("What qualities do you look for in a friend?", validators=[Length(min=0, max=1000)],
+                             render_kw={"rows": 5, "cols": 0})
+    sixteen = TextAreaField("What is your favorite color?", validators=[Length(min=0, max=1000)],
+                            render_kw={"rows": 5, "cols": 0})
+    seventeen = TextAreaField("Are you a morning or night person?", validators=[Length(min=0, max=1000)],
+                              render_kw={"rows": 5, "cols": 0})
+    eighteen = TextAreaField("What is your guilty pleasure?", validators=[Length(min=0, max=1000)],
+                             render_kw={"rows": 5, "cols": 0})
+    twenty = TextAreaField("Why do you want an Ate/Kuya", validators=[Length(min=0, max=1000)],
+                           render_kw={"rows": 5, "cols": 0})
+    twentyone = TextAreaField("What is your class schedule? Include location/room numbers and class",
+                              validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    twentytwo = TextAreaField("Is there anything else you want to share about yourself?",
+                              validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    twentythree = TextAreaField("Provide a message to your future big!", validators=[Length(min=0, max=1000)],
+                                render_kw={"rows": 5, "cols": 0})
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)

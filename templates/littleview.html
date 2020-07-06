@@ -1,21 +1,28 @@
 {% extends "layou2.html" %}
 {% block content %}
-    <center>
-            <h1>{{ big_data.name }}</h1>
-            <h5>Grade: {{ big_data.grade }}</h5>
-            <h5>Email: {{ big_data.email }}</h5>
-            <h5>VT Address: {{ big_data.address }}</h5>
-            <h5>Major(s)/Minor(s): {{ big_data.major }}</h5>
-            <h5>Phone: {{ big_data.phone }}</h5>
-            <h5>Gender: {{ big_data.gender }}</h5>
-            <h5>Birthplace: {{ big_data.birthplace }}</h5>
+
+         <center>
+            <h1>{{ little_data.name }}</h1>
+            <h5>Grade: {{ little_data.grade }}</h5>
+            <h5>Email: {{ little_data.email }}</h5>
+            <h5>VT Address: {{ little_data.vt_address }}</h5>
+            <h5>Major(s)/Minor(s): {{ little_data.major }}</h5>
+            <h5>Phone: {{ little_data.phone }}</h5>
+            <h5>Gender: {{ little_data.gender }}</h5>
+            <h5>Birthplace: {{ little_data.birthplace }}</h5>
             <br>
-            <p>Do you have any gender preference for a male or female little?</p>
-            <p>{{ big_data.one }}</p>
-            <p>Do you mind having more than one little?</p>
-            <p>{{ big_data.two }}</p>
-            <p> Do you prefer to hand out in big groups or small groups?</p>
-            <p> {{ big_data.three }}</p>
+            <div class = "col-md-12 mb-3">
+                {{ form.one.label(class = "form-control-label") }}
+                {{ form.one(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.two.label(class = "form-control-label") }}
+                {{ form.two(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.three.label(class = "form-control-label") }}
+                {{ form.three(class = "form-control form-control-lg")}}
+            </div>
             <div class = "col-md-12 mb-3">
                 {{ form.four.label(class = "form-control-label") }}
                 {{ form.four(class = "form-control form-control-lg")}}
@@ -35,6 +42,10 @@
             <div class = "col-md-12 mb-3">
                 {{ form.eight.label(class = "form-control-label") }}
                 {{ form.eight(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.nine.label(class = "form-control-label") }}
+                {{ form.nine(class = "form-control form-control-lg")}}
             </div>
             <div class = "col-md-12 mb-3">
                 {{ form.ten.label(class = "form-control-label") }}
@@ -57,12 +68,12 @@
                 {{ form.fourteen(class = "form-control form-control-lg")}}
             </div>
             <div class = "col-md-12 mb-3">
-                {{ form.fifteen.label(class = "form-control-label") }}
-                {{ form.fifteen(class = "form-control form-control-lg")}}
-            </div>
-            <div class = "col-md-12 mb-3">
                 {{ form.sixteen.label(class = "form-control-label") }}
                 {{ form.sixteen(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.seventeen.label(class = "form-control-label") }}
+                {{ form.seventeen(class = "form-control form-control-lg")}}
             </div>
             <div class = "col-md-12 mb-3">
                 {{ form.eighteen.label(class = "form-control-label") }}
@@ -70,12 +81,12 @@
             </div>
             <p>Which activities would you prefer to do with your Ate/Kuya?
                 (Please rank them 1-6, 1 = most preferred, 6 = leastpreferred)</p>
-            <p>1. {{ big_data.a_19 }}</p>
-            <p>2. {{ big_data.b_19 }}</p>
-            <p>3. {{ big_data.c_19 }}</p>
-            <p>4. {{ big_data.d_19 }}</p>
-            <p>5. {{ big_data.e_19 }}</p>
-            <p>6. {{ big_data.f_19 }}</p>
+            <p>1. {{ little_data.a_19 }}</p>
+            <p>2. {{ little_data.b_19 }}</p>
+            <p>3. {{ little_data.c_19 }}</p>
+            <p>4. {{ little_data.d_19 }}</p>
+            <p>5. {{ little_data.e_19 }}</p>
+            <p>6. {{ little_data.f_19 }}</p>
             <div class = "col-md-12 mb-3">
                 {{ form.twenty.label(class = "form-control-label") }}
                 {{ form.twenty(class = "form-control form-control-lg")}}
@@ -84,13 +95,14 @@
                 {{ form.twentyone.label(class = "form-control-label") }}
                 {{ form.twentyone(class = "form-control form-control-lg")}}
             </div>
-        </center>
+            <div class = "col-md-12 mb-3">
+                {{ form.twentytwo.label(class = "form-control-label") }}
+                {{ form.twentytwo(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.twentythree.label(class = "form-control-label") }}
+                {{ form.twentythree(class = "form-control form-control-lg")}}
+            </div>
 
-
-
-
-
-
-
-
+         </center>
 {% endblock content %}
