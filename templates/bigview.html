@@ -1,0 +1,89 @@
+{% extends "layou2.html" %}
+{% block content %}
+        <center>
+            <h1>{{ big_data.name }}</h1>
+            <h5>Grade: {{ big_data.grade }}</h5>
+            <h5>Email: {{ big_data.email }}</h5>
+            <h5>VT Address: {{ big_data.address }}</h5>
+            <h5>Major(s)/Minor(s): {{ big_data.major }}</h5>
+            <h5>Phone: {{ big_data.phone }}</h5>
+            <h5>Gender: {{ big_data.gender }}</h5>
+            <h5>Birthplace: {{ big_data.birthplace }}</h5>
+            <br>
+            <p>Do you have any gender preference for a male or female little?</p>
+            <p>{{ big_data.one }}</p>
+            <p>Do you mind having more than one little?</p>
+            <p>{{ big_data.two }}</p>
+            <p> Do you prefer to hand out in big groups or small groups?</p>
+            <p> {{ big_data.three }}</p>
+            <div class = "col-md-12 mb-3">
+                {{ form.four.label(class = "form-control-label") }}
+                {{ form.four(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.five.label(class = "form-control-label") }}
+                {{ form.five(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.six.label(class = "form-control-label") }}
+                {{ form.six(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.seven.label(class = "form-control-label") }}
+                {{ form.seven(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.eight.label(class = "form-control-label") }}
+                {{ form.eight(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.ten.label(class = "form-control-label") }}
+                {{ form.ten(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.eleven.label(class = "form-control-label") }}
+                {{ form.eleven(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.twelve.label(class = "form-control-label") }}
+                {{ form.twelve(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.thirteen.label(class = "form-control-label") }}
+                {{ form.thirteen(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.fourteen.label(class = "form-control-label") }}
+                {{ form.fourteen(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.fifteen.label(class = "form-control-label") }}
+                {{ form.fifteen(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.sixteen.label(class = "form-control-label") }}
+                {{ form.sixteen(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.eighteen.label(class = "form-control-label") }}
+                {{ form.eighteen(class = "form-control form-control-lg")}}
+            </div>
+            <p>Which activities would you prefer to do with your Ate/Kuya?
+                (Please rank them 1-6, 1 = most preferred, 6 = leastpreferred)</p>
+            <p>1. {{ big_data.a_19 }}</p>
+            <p>2. {{ big_data.b_19 }}</p>
+            <p>3. {{ big_data.c_19 }}</p>
+            <p>4. {{ big_data.d_19 }}</p>
+            <p>5. {{ big_data.e_19 }}</p>
+            <p>6. {{ big_data.f_19 }}</p>
+            <div class = "col-md-12 mb-3">
+                {{ form.twenty.label(class = "form-control-label") }}
+                {{ form.twenty(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.twentyone.label(class = "form-control-label") }}
+                {{ form.twentyone(class = "form-control form-control-lg")}}
+            </div>
+
+         </center>
+{% endblock content %}

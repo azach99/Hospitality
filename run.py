@@ -208,6 +208,27 @@ def big_apply():
             form.twentyone.data = q.twentyone
         return render_template("big_application.html", form = form)
 
+@app.route("/bigview", methods = ['GET', 'POST'])
+def big_view():
+    big_data = BigData.query.filter_by(email = current_user.email).first()
+    form = BigBoxForm()
+    form.four.data = big_data.four
+    form.five.data = big_data.five
+    form.six.data = big_data.six
+    form.seven.data = big_data.seven
+    form.eight.data = big_data.eight
+    form.ten.data = big_data.ten
+    form.eleven.data = big_data.eleven
+    form.twelve.data = big_data.twelve
+    form.thirteen.data = big_data.thirteen
+    form.fourteen.data = big_data.fourteen
+    form.fifteen.data = big_data.fifteen
+    form.sixteen.data = big_data.sixteen
+    form.eighteen.data = big_data.eighteen
+    form.twenty.data = big_data.twenty
+    form.twentyone.data = big_data.twentyone
+    return render_template("bigview.html", big_data = big_data, form = form)
+
 @app.route("/logout")
 def logout():
     logout_user()
@@ -349,6 +370,38 @@ class BigForm(FlaskForm):
     twenty = TextAreaField("What does being a big mean to you?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
     twentyone = TextAreaField("Is there anything else you want to share about yourself?", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
     submit = SubmitField("Save and/or Submit")
+
+class BigBoxForm(FlaskForm):
+    four = TextAreaField("What extracurricular activities are you currently involved in?",
+                         validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    five = TextAreaField("What are your favorite movies/TV shows?", validators=[Length(min=0, max=1000)],
+                         render_kw={"rows": 5, "cols": 0})
+    six = TextAreaField("What is your favorite song/artist/music genre?", validators=[Length(min=0, max=1000)],
+                        render_kw={"rows": 5, "cols": 0})
+    seven = TextAreaField("What are your hobbies and talents", validators=[Length(min=0, max=1000)],
+                          render_kw={"rows": 5, "cols": 0})
+    eight = TextAreaField("What is your biggest pet peeve?", validators=[Length(min=0, max=1000)],
+                          render_kw={"rows": 5, "cols": 0})
+    ten = TextAreaField("What is your favorite YouTube video?", validators=[Length(min=0, max=1000)],
+                        render_kw={"rows": 5, "cols": 0})
+    eleven = TextAreaField("What would you do with $1,000", validators=[Length(min=0, max=1000)],
+                           render_kw={"rows": 5, "cols": 0})
+    twelve = TextAreaField("If you had a drink named after you, what would be in it and why?",
+                           validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    thirteen = TextAreaField("What is your dream job/passion?", validators=[Length(min=0, max=1000)],
+                             render_kw={"rows": 5, "cols": 0})
+    fourteen = TextAreaField("What qualities do you look for in a friend?", validators=[Length(min=0, max=1000)],
+                             render_kw={"rows": 5, "cols": 0})
+    fifteen = TextAreaField("Are you a morning or night person?", validators=[Length(min=0, max=1000)],
+                            render_kw={"rows": 5, "cols": 0})
+    sixteen = TextAreaField("What is your guilty pleasure?", validators=[Length(min=0, max=1000)],
+                            render_kw={"rows": 5, "cols": 0})
+    eighteen = TextAreaField("Why do you want a little?", validators=[Length(min=0, max=1000)],
+                             render_kw={"rows": 5, "cols": 0})
+    twenty = TextAreaField("What does being a big mean to you?", validators=[Length(min=0, max=1000)],
+                           render_kw={"rows": 5, "cols": 0})
+    twentyone = TextAreaField("Is there anything else you want to share about yourself?",
+                              validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
