@@ -1,0 +1,19 @@
+{% extends "layou2.html" %}
+{% block content %}
+
+         <center>
+            <h1>{{ profile_data.name }}</h1>
+            <h5>Username: {{ profile_data.username }}</h5>
+            <h5>Instagram: {{ profile_data.instagram }}</h5>
+            <h5>Twitter: {{ profile_data.twitter }}</h5>
+            <h5>Snapchat: {{ profile_data.snapchat }}</h5>
+            <h5>VT Email: {{ profile_data.vt_email }}</h5>
+            <h5>{{ profile_data.kind }}</h5>
+            <br>
+            <div class = "col-md-12 mb-3">
+                {{ form.textbox.label(class = "form-control-label") }}
+                {{ form.textbox(class = "form-control form-control-lg")}}
+            </div>
+
+         </center>
+{% endblock content %}
