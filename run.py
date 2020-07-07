@@ -289,6 +289,15 @@ def profile():
             form.gender.data = q.gender
         return render_template("profile.html", form = form)
 
+@app.route("/viewprofile", methods = ['GET', 'POST'])
+def view_profile():
+    profile_data = ProfileData.query.filter_by(vt_email = current_user.email).first()
+    form = TextBox()
+    if (profile_data is not None):
+        form.textbox.data = profile_data.bio
+    return render_template("viewprofile.html", profile_data = profile_data, form = form)
+
+
 
 @app.route("/logout")
 def logout():
@@ -520,6 +529,9 @@ class ProfileForm(FlaskForm):
                        choices=[("Select", "Select"), ("Big", "Big"), ("Little", "Little")])
     gender = SelectField("Gender (will not be part of public profile)", validators = [Length(min = 0, max = 100)], choices = [("Select", "Select"), ("Male", "Male"), ("Female", "Female"), ("Other", "Other")])
     submit = SubmitField("Save and/or Submit")
+
+class TextBox(FlaskForm):
+    textbox = TextAreaField("", render_kw={"rows": 5, "cols": 0})
 
 
 class User(db.Model, UserMixin):
