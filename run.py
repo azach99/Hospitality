@@ -275,7 +275,19 @@ def bigmales():
     for user in profile_list:
         if str(user.gender) == str("Male") and str(user.kind) == str("Big"):
             bigmale_list.append(user)
-    return render_template("bigmale.html", bigmale_list = bigmale_list)
+    iterations = len(bigmale_list) // 4
+    passing_list = []
+    if (len(bigmale_list) % 4 is not 0):
+        iterations = iterations + 1
+    pin = 0
+    for i in range(iterations):
+        end = pin + 4
+        if end > len(bigmale_list):
+            end = len(bigmale_list)
+        input_list = bigmale_list[pin: end]
+        passing_list.append(input_list)
+        pin = pin + 4
+    return render_template("bigmale.html", bigmale_list = bigmale_list, passing_list = passing_list)
 
 @app.route("/littlemales", methods = ['GET', 'POST'])
 def littlemales():
@@ -284,7 +296,19 @@ def littlemales():
     for user in profile_list:
         if str(user.gender) == str("Male") and str(user.kind) == str("Little"):
             littlemale_list.append(user)
-    return render_template("littlemale.html", littlemale_list = littlemale_list)
+    iterations = len(littlemale_list) // 4
+    passing_list = []
+    if (len(littlemale_list) % 4 is not 0):
+        iterations = iterations + 1
+    pin = 0
+    for i in range(iterations):
+        end = pin + 4
+        if end > len(littlemale_list):
+            end = len(littlemale_list)
+        input_list = littlemale_list[pin: end]
+        passing_list.append(input_list)
+        pin = pin + 4
+    return render_template("bigmale.html", littlemale_list=littlemale_list, passing_list=passing_list)
 
 @app.route("/bigfemales", methods = ['GET', 'POST'])
 def bigfemales():
@@ -293,7 +317,19 @@ def bigfemales():
     for user in profile_list:
         if str(user.gender) == str("Female") and str(user.kind) == str("Big"):
             bigfemale_list.append(user)
-    return render_template("bigfemale.html", bigfemale_list = bigfemale_list)
+    iterations = len(bigfemale_list) // 4
+    passing_list = []
+    if (len(bigfemale_list) % 4 is not 0):
+        iterations = iterations + 1
+    pin = 0
+    for i in range(iterations):
+        end = pin + 4
+        if end > len(bigfemale_list):
+            end = len(bigfemale_list)
+        input_list = bigfemale_list[pin: end]
+        passing_list.append(input_list)
+        pin = pin + 4
+    return render_template("bigmale.html", bigfemale_list=bigfemale_list, passing_list=passing_list)
 
 @app.route("/littlefemales", methods = ['GET', 'POST'])
 def littlefemales():
@@ -302,7 +338,19 @@ def littlefemales():
     for user in profile_list:
         if str(user.gender) == str("Female") and str(user.kind) == str("Little"):
             littlefemale_list.append(user)
-    return render_template("littlefemale.html", littlefemale_list = littlefemale_list)
+    iterations = len(littlefemale_list) // 4
+    passing_list = []
+    if (len(littlefemale_list) % 4 is not 0):
+        iterations = iterations + 1
+    pin = 0
+    for i in range(iterations):
+        end = pin + 4
+        if end > len(littlefemale_list):
+            end = len(littlefemale_list)
+        input_list = littlefemale_list[pin: end]
+        passing_list.append(input_list)
+        pin = pin + 4
+    return render_template("bigmale.html", littlefemale_list=littlefemale_list, passing_list=passing_list)
 
 def secret_function():
     characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
