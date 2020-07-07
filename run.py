@@ -1,3 +1,5 @@
+import random
+
 from flask import Flask, render_template, url_for, flash, redirect, request
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
@@ -7,7 +9,9 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_mail import Mail, Message
+from flask_wtf.file import FileField, FileAllowed
 import secrets
+from PIL import Image
 import os
 
 app = Flask(__name__)
@@ -77,8 +81,9 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        key = secret_function()
         input_user = User(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data,
-                          username=form.username.data, password=hashed, kind = form.kind.data)
+                          username=form.username.data, password=hashed, kind = form.kind.data, key = key)
         db.session.add(input_user)
         db.session.commit()
         flash("Account Created for {}".format(form.username.data), 'success')
@@ -94,6 +99,7 @@ def little_apply():
         q = LittleData.query.filter_by(email = current_user.email).first()
         if (q is not None):
             LittleData.query.filter_by(email = current_user.email).delete()
+        key = secret_function()
         input_little = LittleData(name = form.name.data, grade = form.grade.data, email = form.email.data,
                                   phone = form.phone.data, room_phone = form.room_phone.data, gender = form.gender.data,
                                   birthday = form.birthday.data, birthplace = form.birthplace.data, vt_address = form.vt_address.data,
@@ -103,7 +109,7 @@ def little_apply():
                                   twelve = form.twelve.data, thirteen = form.thirteen.data, fourteen = form.fourteen.data, sixteen = form.sixteen.data,
                                   seventeen = form.seventeen.data, eighteen = form.eighteen.data, a_19 = form.a_19.data, b_19 = form.b_19.data,
                                   c_19 = form.c_19.data, d_19 = form.d_19.data, e_19 = form.e_19.data, f_19 = form.f_19.data, twenty = form.twenty.data,
-                                  twentyone = form.twentyone.data, twentytwo = form.twentytwo.data, twentythree = form.twentythree.data)
+                                  twentyone = form.twentyone.data, twentytwo = form.twentytwo.data, twentythree = form.twentythree.data, key = key)
         little_db.session.add(input_little)
         little_db.session.commit()
         flash("Saved Application for {}".format(form.name.data), 'success')
@@ -159,6 +165,7 @@ def big_apply():
         q = BigData.query.filter_by(email=current_user.email).first()
         if (q is not None):
             BigData.query.filter_by(email=current_user.email).delete()
+        key = secret_function()
         input_big = BigData(name = form.name.data, grade = form.grade.data, email = form.email.data,
                             phone = form.phone.data, gender = form.gender.data, birthplace = form.birthplace.data,
                             vt_address = form.vt_address.data, major = form.major.data, one = form.one.data, two = form.two.data,
@@ -168,7 +175,7 @@ def big_apply():
                             fourteen = form.thirteen.data, sixteen = form.sixteen.data, fifteen = form.fifteen.data,
                             eighteen = form.eighteen.data, a_19 = form.a_19.data, b_19 = form.b_19.data, c_19 = form.c_19.data,
                             d_19 = form.d_19.data, e_19 = form.e_19.data, f_19 = form.f_19.data, twenty = form.twenty.data,
-                            twentyone = form.twentyone.data)
+                            twentyone = form.twentyone.data, key = key)
         big_db.session.add(input_big)
         big_db.session.commit()
         flash("Saved Application for {}".format(form.name.data), 'success')
@@ -261,16 +268,45 @@ def little_view():
         form.twentythree.data = little_data.twentythree
     return render_template("littleview.html", little_data = little_data, form = form)
 
+def secret_function():
+    characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                  'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                  'n', 'o', 'p', 'q', 'r' ,'s','t', 'u', 'v', 'w', 'x', 'y', 'z',
+                  '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+    start = ""
+    for i in range(64):
+        n = random.randint(0, len(characters) - 1)
+        start = "{}{}".format(start, characters[n])
+    return start
+
+def save_picture(form_picture):
+    random_hex = secret_function()
+    f_name, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = "{}{}".format(random_hex, f_ext)
+    picture_path = os.path.join(app.root_path, 'static/assets/img', picture_fn)
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+    return picture_fn
+
 @app.route("/modifyprofile", methods = ['GET', 'POST'])
 def profile():
     form = ProfileForm()
     if form.validate_on_submit():
         q = ProfileData.query.filter_by(vt_email=current_user.email).first()
+        pic = q.picture
         if (q is not None):
             ProfileData.query.filter_by(vt_email=current_user.email).delete()
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+        else:
+            picture_file = pic
+        key = secret_function()
         input_profile = ProfileData(name = form.name.data, username = form.username.data, bio = form.bio.data,
                                     instagram = form.instagram.data, twitter = form.twitter.data, snapchat = form.snapchat.data,
-                                    vt_email = form.vt_email.data, kind = form.kind.data, gender = form.gender.data)
+                                    vt_email = form.vt_email.data, kind = form.kind.data, gender = form.gender.data, key = key, picture = picture_file)
         profile_db.session.add(input_profile)
         profile_db.session.commit()
         flash("Updated Profile", 'success')
@@ -287,6 +323,7 @@ def profile():
             form.vt_email.data = q.vt_email
             form.kind.data = q.kind
             form.gender.data = q.gender
+            form.picture.data = q.picture
         return render_template("profile.html", form = form)
 
 @app.route("/viewprofile", methods = ['GET', 'POST'])
@@ -518,6 +555,7 @@ class LittleBoxForm(FlaskForm):
                                 render_kw={"rows": 5, "cols": 0})
 
 class ProfileForm(FlaskForm):
+    picture = FileField('Profile Picture', validators = [FileAllowed(['jpg', 'png'])])
     name = StringField("Name", validators = [Length(min = 0, max = 50)])
     username = StringField("Username", validators = [Length(min = 0, max = 50)])
     bio = TextAreaField("Tell us about yourself", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
@@ -529,6 +567,7 @@ class ProfileForm(FlaskForm):
                        choices=[("Select", "Select"), ("Big", "Big"), ("Little", "Little")])
     gender = SelectField("Gender (will not be part of public profile)", validators = [Length(min = 0, max = 100)], choices = [("Select", "Select"), ("Male", "Male"), ("Female", "Female"), ("Other", "Other")])
     submit = SubmitField("Save and/or Submit")
+
 
 class TextBox(FlaskForm):
     textbox = TextAreaField("", render_kw={"rows": 5, "cols": 0})
@@ -542,6 +581,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120))
     kind = db.Column(db.String(120))
     password = db.Column(db.String(60))
+    key = db.Column(db.String(128))
 
     def __repr__(self):
         return "User({}, {}, {}, {}, {})".format(self.first_name, self.last_name, self.username, self.email, self.kind)
@@ -599,6 +639,7 @@ class LittleData(little_db.Model):
     twentyone = little_db.Column(little_db.String(1000))
     twentytwo = little_db.Column(little_db.String(1000))
     twentythree = little_db.Column(little_db.String(1000))
+    key = little_db.Column(little_db.String(128))
 
 class BigData(big_db.Model):
     id = big_db.Column(big_db.Integer, primary_key = True)
@@ -634,6 +675,7 @@ class BigData(big_db.Model):
     f_19 = big_db.Column(big_db.String(1000))
     twenty = big_db.Column(big_db.String(1000))
     twentyone = big_db.Column(big_db.String(1000))
+    key = big_db.Column(big_db.String(128))
 
 class ProfileData(profile_db.Model):
     id = profile_db.Column(profile_db.Integer, primary_key=True)
@@ -646,6 +688,8 @@ class ProfileData(profile_db.Model):
     vt_email = profile_db.Column(profile_db.String(50))
     kind = profile_db.Column(profile_db.String(50))
     gender = profile_db.Column(profile_db.String(100))
+    key = profile_db.Column(profile_db.String(128))
+    picture = profile_db.Column(profile_db.String(200))
 
 
 

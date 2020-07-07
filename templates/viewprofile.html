@@ -3,6 +3,7 @@
 
          <center>
             <h1>{{ profile_data.name }}</h1>
+             <img class="rounded-circle account-img" src="{{ 'static/assets/img/{}'.format(profile_data.picture) }}">
             <h5>Username: {{ profile_data.username }}</h5>
             <h5>Instagram: {{ profile_data.instagram }}</h5>
             <h5>Twitter: {{ profile_data.twitter }}</h5>
