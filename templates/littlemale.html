@@ -1,0 +1,25 @@
+{% extends "layou2.html" %}
+{% block content %}
+<center>
+    <h1>Male Littles</h1>
+    <br>
+    <br>
+
+    {% for user in littlemale_list %}
+        <div class = "row">
+
+        <div class="col-sm">
+          <label for="year">Name</label>
+            <h5><a href="#">{{ user.name }}</a></h5>
+        </div>
+        <div class="col-sm">
+          <label for="year">Email</label>
+            <h5>{{ user.vt_email }}</h5>
+        </div>
+    {% endfor %}
+    <br>
+    <br>
+    <br>
+     </center>
+
+{% endblock content %}

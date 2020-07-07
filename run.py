@@ -268,6 +268,42 @@ def little_view():
         form.twentythree.data = little_data.twentythree
     return render_template("littleview.html", little_data = little_data, form = form)
 
+@app.route("/bigmales", methods = ['GET', 'MOST'])
+def bigmales():
+    profile_list = ProfileData.query.all()
+    bigmale_list = []
+    for user in profile_list:
+        if str(user.gender) == str("Male") and str(user.kind) == str("Big"):
+            bigmale_list.append(user)
+    return render_template("bigmale.html", bigmale_list = bigmale_list)
+
+@app.route("/littlemales", methods = ['GET', 'POST'])
+def littlemales():
+    profile_list = ProfileData.query.all()
+    littlemale_list = []
+    for user in profile_list:
+        if str(user.gender) == str("Male") and str(user.kind) == str("Little"):
+            littlemale_list.append(user)
+    return render_template("littlemale.html", littlemale_list = littlemale_list)
+
+@app.route("/bigfemales", methods = ['GET', 'POST'])
+def bigfemales():
+    profile_list = ProfileData.query.all()
+    bigfemale_list = []
+    for user in profile_list:
+        if str(user.gender) == str("Female") and str(user.kind) == str("Big"):
+            bigfemale_list.append(user)
+    return render_template("bigfemale.html", bigfemale_list = bigfemale_list)
+
+@app.route("/littlefemales", methods = ['GET', 'POST'])
+def littlefemales():
+    profile_list = ProfileData.query.all()
+    littlefemale_list = []
+    for user in profile_list:
+        if str(user.gender) == str("Female") and str(user.kind) == str("Little"):
+            littlefemale_list.append(user)
+    return render_template("littlefemale.html", littlefemale_list = littlefemale_list)
+
 def secret_function():
     characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
                   'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -296,17 +332,12 @@ def profile():
     form = ProfileForm()
     if form.validate_on_submit():
         q = ProfileData.query.filter_by(vt_email=current_user.email).first()
-        pic = q.picture
-        if (q is not None):
-            ProfileData.query.filter_by(vt_email=current_user.email).delete()
-        if form.picture.data:
-            picture_file = save_picture(form.picture.data)
-        else:
-            picture_file = pic
+        if q is not None:
+            ProfileData.query.filter_by(vt_email = current_user.email).delete()
         key = secret_function()
         input_profile = ProfileData(name = form.name.data, username = form.username.data, bio = form.bio.data,
                                     instagram = form.instagram.data, twitter = form.twitter.data, snapchat = form.snapchat.data,
-                                    vt_email = form.vt_email.data, kind = form.kind.data, gender = form.gender.data, key = key, picture = picture_file)
+                                    vt_email = form.vt_email.data, kind = form.kind.data, gender = form.gender.data, key = key)
         profile_db.session.add(input_profile)
         profile_db.session.commit()
         flash("Updated Profile", 'success')
@@ -690,6 +721,9 @@ class ProfileData(profile_db.Model):
     gender = profile_db.Column(profile_db.String(100))
     key = profile_db.Column(profile_db.String(128))
     picture = profile_db.Column(profile_db.String(200))
+
+    def __repr__(self):
+        return "{}, {}, {}, {}".format(self.name, self.gender, self.kind, self.vt_email)
 
 
 
