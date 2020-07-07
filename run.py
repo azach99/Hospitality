@@ -17,9 +17,12 @@ app.config['SECRET_KEY'] = 'ej6swibjsk6920bj14jdzej79hfssr63fgbs'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///little_data.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///big_data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///profile_data.db'
+
 db = SQLAlchemy(app)
 little_db = SQLAlchemy(app)
 big_db = SQLAlchemy(app)
+profile_db = SQLAlchemy(app)
 
 
 bcrypt = Bcrypt(app)
@@ -212,57 +215,78 @@ def big_apply():
 def big_view():
     big_data = BigData.query.filter_by(email = current_user.email).first()
     form = BigBoxForm()
-    form.four.data = big_data.four
-    form.five.data = big_data.five
-    form.six.data = big_data.six
-    form.seven.data = big_data.seven
-    form.eight.data = big_data.eight
-    form.ten.data = big_data.ten
-    form.eleven.data = big_data.eleven
-    form.twelve.data = big_data.twelve
-    form.thirteen.data = big_data.thirteen
-    form.fourteen.data = big_data.fourteen
-    form.fifteen.data = big_data.fifteen
-    form.sixteen.data = big_data.sixteen
-    form.eighteen.data = big_data.eighteen
-    form.twenty.data = big_data.twenty
-    form.twentyone.data = big_data.twentyone
+    if big_data is not None:
+        form.four.data = big_data.four
+        form.five.data = big_data.five
+        form.six.data = big_data.six
+        form.seven.data = big_data.seven
+        form.eight.data = big_data.eight
+        form.ten.data = big_data.ten
+        form.eleven.data = big_data.eleven
+        form.twelve.data = big_data.twelve
+        form.thirteen.data = big_data.thirteen
+        form.fourteen.data = big_data.fourteen
+        form.fifteen.data = big_data.fifteen
+        form.sixteen.data = big_data.sixteen
+        form.eighteen.data = big_data.eighteen
+        form.twenty.data = big_data.twenty
+        form.twentyone.data = big_data.twentyone
     return render_template("bigview.html", big_data = big_data, form = form)
 
 @app.route("/littleview", methods = ['GET', 'MOST'])
 def little_view():
     little_data = LittleData.query.filter_by(email = current_user.email).first()
     form = LittleBoxForm()
-    form.one.data = little_data.one
-    form.two.data = little_data.two
-    form.three.data = little_data.three
-    form.four.data = little_data.four
-    form.five.data = little_data.five
-    form.six.data = little_data.six
-    form.seven.data = little_data.seven
-    form.eight.data = little_data.eight
-    form.nine.data = little_data.nine
-    form.ten.data = little_data.ten
-    form.eleven.data = little_data.eleven
-    form.twelve.data = little_data.twelve
-    form.thirteen.data = little_data.thirteen
-    form.fourteen.data = little_data.fourteen
-    form.sixteen.data = little_data.sixteen
-    form.seventeen.data = little_data.seventeen
-    form.eighteen.data = little_data.eighteen
-    form.twenty.data = little_data.twenty
-    form.twentyone.data = little_data.twentyone
-    form.twentytwo.data = little_data.twentytwo
-    form.twentythree.data = little_data.twentythree
+    if (little_data is not None):
+        form.one.data = little_data.one
+        form.two.data = little_data.two
+        form.three.data = little_data.three
+        form.four.data = little_data.four
+        form.five.data = little_data.five
+        form.six.data = little_data.six
+        form.seven.data = little_data.seven
+        form.eight.data = little_data.eight
+        form.nine.data = little_data.nine
+        form.ten.data = little_data.ten
+        form.eleven.data = little_data.eleven
+        form.twelve.data = little_data.twelve
+        form.thirteen.data = little_data.thirteen
+        form.fourteen.data = little_data.fourteen
+        form.sixteen.data = little_data.sixteen
+        form.seventeen.data = little_data.seventeen
+        form.eighteen.data = little_data.eighteen
+        form.twenty.data = little_data.twenty
+        form.twentyone.data = little_data.twentyone
+        form.twentytwo.data = little_data.twentytwo
+        form.twentythree.data = little_data.twentythree
     return render_template("littleview.html", little_data = little_data, form = form)
 
-@app.route("/profile", methods = ['GET', 'POST'])
+@app.route("/modifyprofile", methods = ['GET', 'POST'])
 def profile():
     form = ProfileForm()
     if form.validate_on_submit():
-        flash("Updated Profile")
+        q = ProfileData.query.filter_by(vt_email=current_user.email).first()
+        if (q is not None):
+            ProfileData.query.filter_by(vt_email=current_user.email).delete()
+        input_profile = ProfileData(name = form.name.data, username = form.username.data, bio = form.bio.data,
+                                    instagram = form.instagram.data, twitter = form.twitter.data, snapchat = form.snapchat.data,
+                                    vt_email = form.vt_email.data, kind = form.kind.data, gender = form.gender.data)
+        profile_db.session.add(input_profile)
+        profile_db.session.commit()
+        flash("Updated Profile", 'success')
         return redirect(url_for("home"))
     else:
+        q = ProfileData.query.filter_by(vt_email=current_user.email).first()
+        if (q is not None):
+            form.name.data = q.name
+            form.username.data = q.username
+            form.bio.data = q.bio
+            form.instagram.data = q.instagram
+            form.twitter.data = q.twitter
+            form.snapchat.data = q.snapchat
+            form.vt_email.data = q.vt_email
+            form.kind.data = q.kind
+            form.gender.data = q.gender
         return render_template("profile.html", form = form)
 
 
@@ -525,79 +549,91 @@ class User(db.Model, UserMixin):
         return User.query.get(user_id)
 
 class LittleData(little_db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(50))
-    grade = db.Column(db.String(25))
-    email = db.Column(db.String(120), unique = True)
-    phone = db.Column(db.String(20))
-    room_phone = db.Column(db.String(20))
-    gender = db.Column(db.String(20))
-    birthday = db.Column(db.String(30))
-    birthplace = db.Column(db.String(100))
-    vt_address = db.Column(db.String(150))
-    major = db.Column(db.String(200))
-    one = db.Column(db.String(1000))
-    two = db.Column(db.String(1000))
-    three = db.Column(db.String(1000))
-    four = db.Column(db.String(1000))
-    five = db.Column(db.String(1000))
-    six = db.Column(db.String(1000))
-    seven = db.Column(db.String(1000))
-    eight = db.Column(db.String(1000))
-    nine = db.Column(db.String(1000))
-    ten = db.Column(db.String(1000))
-    eleven = db.Column(db.String(1000))
-    twelve = db.Column(db.String(1000))
-    thirteen = db.Column(db.String(1000))
-    fourteen = db.Column(db.String(1000))
-    sixteen = db.Column(db.String(1000))
-    seventeen = db.Column(db.String(1000))
-    eighteen = db.Column(db.String(1000))
-    a_19 = db.Column(db.String(1000))
-    b_19 = db.Column(db.String(1000))
-    c_19 = db.Column(db.String(1000))
-    d_19 = db.Column(db.String(1000))
-    e_19 = db.Column(db.String(1000))
-    f_19 = db.Column(db.String(1000))
-    twenty = db.Column(db.String(1000))
-    twentyone = db.Column(db.String(1000))
-    twentytwo = db.Column(db.String(1000))
-    twentythree = db.Column(db.String(1000))
+    id = little_db.Column(little_db.Integer, primary_key = True)
+    name = little_db.Column(little_db.String(50))
+    grade = little_db.Column(little_db.String(25))
+    email = little_db.Column(little_db.String(120), unique = True)
+    phone = little_db.Column(little_db.String(20))
+    room_phone = little_db.Column(little_db.String(20))
+    gender = little_db.Column(little_db.String(20))
+    birthday = little_db.Column(little_db.String(30))
+    birthplace = little_db.Column(little_db.String(100))
+    vt_address = little_db.Column(little_db.String(150))
+    major = little_db.Column(little_db.String(200))
+    one = little_db.Column(little_db.String(1000))
+    two = little_db.Column(little_db.String(1000))
+    three = little_db.Column(little_db.String(1000))
+    four = little_db.Column(little_db.String(1000))
+    five = little_db.Column(little_db.String(1000))
+    six = little_db.Column(little_db.String(1000))
+    seven = little_db.Column(little_db.String(1000))
+    eight = little_db.Column(little_db.String(1000))
+    nine = little_db.Column(little_db.String(1000))
+    ten = little_db.Column(little_db.String(1000))
+    eleven = little_db.Column(little_db.String(1000))
+    twelve = little_db.Column(little_db.String(1000))
+    thirteen = little_db.Column(little_db.String(1000))
+    fourteen = little_db.Column(little_db.String(1000))
+    sixteen = little_db.Column(little_db.String(1000))
+    seventeen = little_db.Column(little_db.String(1000))
+    eighteen = little_db.Column(little_db.String(1000))
+    a_19 = little_db.Column(little_db.String(1000))
+    b_19 = little_db.Column(little_db.String(1000))
+    c_19 = little_db.Column(little_db.String(1000))
+    d_19 = little_db.Column(little_db.String(1000))
+    e_19 = little_db.Column(little_db.String(1000))
+    f_19 = little_db.Column(little_db.String(1000))
+    twenty = little_db.Column(little_db.String(1000))
+    twentyone = little_db.Column(little_db.String(1000))
+    twentytwo = little_db.Column(little_db.String(1000))
+    twentythree = little_db.Column(little_db.String(1000))
 
 class BigData(big_db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(50))
-    grade = db.Column(db.String(25))
-    email = db.Column(db.String(120), unique = True)
-    phone = db.Column(db.String(20))
-    gender = db.Column(db.String(20))
-    birthplace = db.Column(db.String(100))
-    vt_address = db.Column(db.String(150))
-    major = db.Column(db.String(200))
-    one = db.Column(db.String(1000))
-    two = db.Column(db.String(1000))
-    three = db.Column(db.String(1000))
-    four = db.Column(db.String(1000))
-    five = db.Column(db.String(1000))
-    six = db.Column(db.String(1000))
-    seven = db.Column(db.String(1000))
-    eight = db.Column(db.String(1000))
-    ten = db.Column(db.String(1000))
-    eleven = db.Column(db.String(1000))
-    twelve = db.Column(db.String(1000))
-    thirteen = db.Column(db.String(1000))
-    fourteen = db.Column(db.String(1000))
-    sixteen = db.Column(db.String(1000))
-    fifteen = db.Column(db.String(1000))
-    eighteen = db.Column(db.String(1000))
-    a_19 = db.Column(db.String(1000))
-    b_19 = db.Column(db.String(1000))
-    c_19 = db.Column(db.String(1000))
-    d_19 = db.Column(db.String(1000))
-    e_19 = db.Column(db.String(1000))
-    f_19 = db.Column(db.String(1000))
-    twenty = db.Column(db.String(1000))
-    twentyone = db.Column(db.String(1000))
+    id = big_db.Column(big_db.Integer, primary_key = True)
+    name = big_db.Column(big_db.String(50))
+    grade = big_db.Column(big_db.String(25))
+    email = big_db.Column(big_db.String(120), unique = True)
+    phone = big_db.Column(big_db.String(20))
+    gender = big_db.Column(big_db.String(20))
+    birthplace = big_db.Column(big_db.String(100))
+    vt_address = big_db.Column(big_db.String(150))
+    major = big_db.Column(big_db.String(200))
+    one = big_db.Column(big_db.String(1000))
+    two = big_db.Column(big_db.String(1000))
+    three = big_db.Column(big_db.String(1000))
+    four = big_db.Column(big_db.String(1000))
+    five = big_db.Column(big_db.String(1000))
+    six = big_db.Column(big_db.String(1000))
+    seven = big_db.Column(big_db.String(1000))
+    eight = big_db.Column(big_db.String(1000))
+    ten = big_db.Column(big_db.String(1000))
+    eleven = big_db.Column(big_db.String(1000))
+    twelve = big_db.Column(big_db.String(1000))
+    thirteen = big_db.Column(big_db.String(1000))
+    fourteen = big_db.Column(big_db.String(1000))
+    sixteen = big_db.Column(big_db.String(1000))
+    fifteen = big_db.Column(big_db.String(1000))
+    eighteen = big_db.Column(big_db.String(1000))
+    a_19 = big_db.Column(big_db.String(1000))
+    b_19 = big_db.Column(big_db.String(1000))
+    c_19 = big_db.Column(big_db.String(1000))
+    d_19 = big_db.Column(big_db.String(1000))
+    e_19 = big_db.Column(big_db.String(1000))
+    f_19 = big_db.Column(big_db.String(1000))
+    twenty = big_db.Column(big_db.String(1000))
+    twentyone = big_db.Column(big_db.String(1000))
+
+class ProfileData(profile_db.Model):
+    id = profile_db.Column(profile_db.Integer, primary_key=True)
+    name = profile_db.Column(profile_db.String(50))
+    username = profile_db.Column(profile_db.String(50))
+    bio = profile_db.Column(profile_db.String(1000))
+    instagram = profile_db.Column(profile_db.String(50))
+    twitter = profile_db.Column(profile_db.String(50))
+    snapchat = profile_db.Column(profile_db.String(50))
+    vt_email = profile_db.Column(profile_db.String(50))
+    kind = profile_db.Column(profile_db.String(50))
+    gender = profile_db.Column(profile_db.String(100))
 
 
 
