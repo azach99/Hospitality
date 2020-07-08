@@ -271,7 +271,7 @@ def little_view():
 
 @app.route("/bigmales", methods = ['GET', 'MOST'])
 def bigmales():
-    profile_list = ProfileData.query.all()
+    profile_list = PicutreData.query.all()
     bigmale_list = []
     for user in profile_list:
         if str(user.gender) == str("Male") and str(user.kind) == str("Big"):
@@ -292,7 +292,7 @@ def bigmales():
 
 @app.route("/littlemales", methods = ['GET', 'POST'])
 def littlemales():
-    profile_list = ProfileData.query.all()
+    profile_list = PicutreData.query.all()
     littlemale_list = []
     for user in profile_list:
         if str(user.gender) == str("Male") and str(user.kind) == str("Little"):
@@ -309,11 +309,11 @@ def littlemales():
         input_list = littlemale_list[pin: end]
         passing_list.append(input_list)
         pin = pin + 4
-    return render_template("bigmale.html", littlemale_list=littlemale_list, passing_list=passing_list)
+    return render_template("littlemale.html", littlemale_list=littlemale_list, passing_list=passing_list)
 
 @app.route("/bigfemales", methods = ['GET', 'POST'])
 def bigfemales():
-    profile_list = ProfileData.query.all()
+    profile_list = PicutreData.query.all()
     bigfemale_list = []
     for user in profile_list:
         if str(user.gender) == str("Female") and str(user.kind) == str("Big"):
@@ -330,11 +330,11 @@ def bigfemales():
         input_list = bigfemale_list[pin: end]
         passing_list.append(input_list)
         pin = pin + 4
-    return render_template("bigmale.html", bigfemale_list=bigfemale_list, passing_list=passing_list)
+    return render_template("bigfemale.html", bigfemale_list=bigfemale_list, passing_list=passing_list)
 
 @app.route("/littlefemales", methods = ['GET', 'POST'])
 def littlefemales():
-    profile_list = ProfileData.query.all()
+    profile_list = PicutreData.query.all()
     littlefemale_list = []
     for user in profile_list:
         if str(user.gender) == str("Female") and str(user.kind) == str("Little"):
@@ -351,7 +351,7 @@ def littlefemales():
         input_list = littlefemale_list[pin: end]
         passing_list.append(input_list)
         pin = pin + 4
-    return render_template("bigmale.html", littlefemale_list=littlefemale_list, passing_list=passing_list)
+    return render_template("littlefemale.html", littlefemale_list=littlefemale_list, passing_list=passing_list)
 
 def secret_function():
     characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -435,7 +435,7 @@ def update_picture():
             kind = quest.kind
             gender = quest.gender
             enter = PicutreData(key = key, email = email, kind = kind,
-                                gender = gender, pic = pic)
+                                gender = gender, pic = pic, name = quest.name)
             picture_db.session.add(enter)
             picture_db.session.commit()
             flash("Successful Picture Change", 'success')
@@ -810,6 +810,7 @@ class PicutreData(picture_db.Model):
     kind = picture_db.Column(picture_db.String(50))
     gender = picture_db.Column(picture_db.String(100))
     pic = picture_db.Column(picture_db.String(500))
+    name = picture_db.Column(picture_db.String(50))
 
     def __repr__(self):
         return "Picture({}, {}, {}, {})".format(self.email, self.kind, self.gender, self.pic)

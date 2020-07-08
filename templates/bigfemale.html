@@ -5,16 +5,14 @@
     <br>
     <br>
 
-    {% for user in bigfemale_list %}
+    {% for list in passing_list%}
         <div class = "row">
-
-        <div class="col-sm">
-          <label for="year">Name</label>
-            <h5><a href="#">{{ user.name }}</a></h5>
-        </div>
-        <div class="col-sm">
-          <label for="year">Email</label>
-            <h5>{{ user.vt_email }}</h5>
+            {% for user in list %}
+                <div class="col-sm">
+                    <img class="rounded-circle account-img" src="{{ 'static/assets/img/{}'.format(user.pic) }}">
+                <h5><a href="#">{{ user.name }}</a></h5>
+            </div>
+            {% endfor %}
         </div>
     {% endfor %}
     <br>
