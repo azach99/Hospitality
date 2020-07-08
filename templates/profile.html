@@ -7,15 +7,7 @@
       <form class="needs-validation" method = "POST" enctype = "multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="row">
-          <div class = "col-md-12 mb-3">
-            <p>Profile Picture</p>
-            {{ form.picture(class = "text-light") }}
-            {% if form.picture.errors %}
-              {% for error in form.picture.errors %}
-                  <span class = "text-danger">{{ error }}</span><br>
-                {% endfor %}
-            {% endif %}
-          </div>
+
           <div class = "col-md-12 mb-3">
             {{ form.name.label(class = "form-control-label") }}
             {% if form.name.errors %}

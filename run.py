@@ -22,12 +22,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///little_data.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///big_data.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///profile_data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///picture_data.db'
 
 db = SQLAlchemy(app)
 little_db = SQLAlchemy(app)
 big_db = SQLAlchemy(app)
 profile_db = SQLAlchemy(app)
-
+picture_db = SQLAlchemy(app)
 
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
@@ -402,7 +403,6 @@ def profile():
             form.vt_email.data = q.vt_email
             form.kind.data = q.kind
             form.gender.data = q.gender
-            form.picture.data = q.picture
         return render_template("profile.html", form = form)
 
 @app.route("/viewprofile", methods = ['GET', 'POST'])
@@ -411,9 +411,37 @@ def view_profile():
     form = TextBox()
     if (profile_data is not None):
         form.textbox.data = profile_data.bio
-    return render_template("viewprofile.html", profile_data = profile_data, form = form)
+    picture_data = PicutreData.query.filter_by(email = current_user.email).first()
+    return render_template("viewprofile.html", profile_data = profile_data, form = form, picture_data = picture_data)
 
-
+@app.route("/updatepicture", methods = ['GET', 'POST'])
+def update_picture():
+    form = UpdatePicture()
+    if form.validate_on_submit():
+        quest = ProfileData.query.filter_by(vt_email = current_user.email).first()
+        if (quest is None):
+            flash("Complete the Profile Form first to update your profile picture", "danger")
+            return redirect(url_for("profile"))
+        elif (quest.vt_email is None):
+            flash("Enter your VT Email in the Profile form to update your profile pic", "danger")
+            return (redirect(url_for("profile")))
+        else:
+            q = PicutreData.query.filter_by(email = current_user.email).first()
+            if q is not None:
+                PicutreData.query.filter_by(email = current_user.email).delete()
+            key = secret_function()
+            email = current_user.email
+            pic = save_picture(form.picture.data)
+            kind = quest.kind
+            gender = quest.gender
+            enter = PicutreData(key = key, email = email, kind = kind,
+                                gender = gender, pic = pic)
+            picture_db.session.add(enter)
+            picture_db.session.commit()
+            flash("Successful Picture Change", 'success')
+            return redirect(url_for("update_picture"))
+    else:
+        return render_template("updatepicture.html", form = form)
 
 @app.route("/logout")
 def logout():
@@ -634,7 +662,6 @@ class LittleBoxForm(FlaskForm):
                                 render_kw={"rows": 5, "cols": 0})
 
 class ProfileForm(FlaskForm):
-    picture = FileField('Profile Picture', validators = [FileAllowed(['jpg', 'png'])])
     name = StringField("Name", validators = [Length(min = 0, max = 50)])
     username = StringField("Username", validators = [Length(min = 0, max = 50)])
     bio = TextAreaField("Tell us about yourself", validators = [Length(min = 0, max = 1000)], render_kw={"rows": 5, "cols": 0})
@@ -650,6 +677,10 @@ class ProfileForm(FlaskForm):
 
 class TextBox(FlaskForm):
     textbox = TextAreaField("", render_kw={"rows": 5, "cols": 0})
+
+class UpdatePicture(FlaskForm):
+    picture = FileField("Update Profile Picture", validators = [FileAllowed(['jpg', 'png'])])
+    submit = SubmitField('Update')
 
 
 class User(db.Model, UserMixin):
@@ -768,12 +799,20 @@ class ProfileData(profile_db.Model):
     kind = profile_db.Column(profile_db.String(50))
     gender = profile_db.Column(profile_db.String(100))
     key = profile_db.Column(profile_db.String(128))
-    picture = profile_db.Column(profile_db.String(200))
 
     def __repr__(self):
         return "{}, {}, {}, {}".format(self.name, self.gender, self.kind, self.vt_email)
 
+class PicutreData(picture_db.Model):
+    id = picture_db.Column(picture_db.Integer, primary_key = True)
+    key = picture_db.Column(picture_db.String(128))
+    email = picture_db.Column(picture_db.String(50))
+    kind = picture_db.Column(picture_db.String(50))
+    gender = picture_db.Column(picture_db.String(100))
+    pic = picture_db.Column(picture_db.String(500))
 
+    def __repr__(self):
+        return "Picture({}, {}, {}, {})".format(self.email, self.kind, self.gender, self.pic)
 
 
 
