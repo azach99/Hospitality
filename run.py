@@ -353,6 +353,15 @@ def littlefemales():
         pin = pin + 4
     return render_template("littlefemale.html", littlefemale_list=littlefemale_list, passing_list=passing_list)
 
+@app.route("/otherprofile/<string:email_string>", methods = ['GET', 'POST'])
+def other_profile(email_string):
+    profile_data = ProfileData.query.filter_by(vt_email=email_string).first()
+    form = TextBox()
+    if (profile_data is not None):
+        form.textbox.data = profile_data.bio
+    picture_data = PicutreData.query.filter_by(email=email_string).first()
+    return render_template("otherprofile.html", profile_data=profile_data, form=form, picture_data=picture_data, pic = picture_data.pic)
+
 def secret_function():
     characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
                   'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
