@@ -57,49 +57,10 @@
             <li class="nav-item">
                 <a class="nav-link" href="/register">Register</a>
               </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/adminlogin">Admin Login</a>
-              </li>
             {% endif %}
             {% if current_user.is_authenticated %}
                 <li class="nav-item">
                   <a class="nav-link" href="/logout">Logout</a>
-              </li>
-                {% if current_user.kind == "Big" %}
-                <li class="nav-item">
-                  <a class="nav-link" href="/bigapplication">Modify Big Application</a>
-              </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/bigview">View Big Application</a>
-              </li>
-            {% else %}
-                <li class="nav-item">
-                  <a class="nav-link" href="/littleapplication">Modify Little Application</a>
-              </li>
-            <li class="nav-item">
-                  <a class="nav-link" href="/littleview">View Little Application</a>
-              </li>
-            {% endif%}
-                <li class="nav-item">
-                  <a class="nav-link" href="/modifyprofile">Modify Profile</a>
-              </li>
-            <li class="nav-item">
-                  <a class="nav-link" href="/viewprofile">View Profile</a>
-              </li>
-            <li class="nav-item">
-                  <a class="nav-link" href="/updatepicture">Update Picture</a>
-              </li>
-            <li class="nav-item">
-                  <a class="nav-link" href="/bigmales">Big Males</a>
-              </li>
-            <li class="nav-item">
-                  <a class="nav-link" href="/bigfemales">Big Females</a>
-              </li>
-            <li class="nav-item">
-                  <a class="nav-link" href="/littlemales">Little Males</a>
-              </li>
-            <li class="nav-item">
-                  <a class="nav-link" href="/littlefemales">Little Females</a>
               </li>
             {% endif %}
 

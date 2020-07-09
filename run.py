@@ -41,7 +41,22 @@ mail = Mail(app)
 confirmed = False
 
 
-
+def restart():
+    db.drop_all()
+    db.create_all()
+    little_db.drop_all()
+    little_db.create_all()
+    big_db.drop_all()
+    big_db.create_all()
+    profile_db.drop_all()
+    profile_db.create_all()
+    picture_db.drop_all()
+    picture_db.create_all()
+    admin_user = User(first_name = "Admin", last_name = "Admin", username = "admin",
+                      email = "admin@vt.edu", kind = "Big", password = "@admin21",
+                      key = secret_function())
+    db.session.add(admin_user)
+    db.session.commit()
 
 
 
@@ -97,6 +112,7 @@ def register():
         return render_template("registration.html", form = form)
 
 @app.route("/littleapplication", methods = ['GET', 'POST'])
+@login_required
 def little_apply():
     form = LittleForm()
     if form.validate_on_submit():
@@ -163,6 +179,7 @@ def little_apply():
         return render_template("little_application.html", form = form)
 
 @app.route("/bigapplication", methods = ['GET', 'POST'])
+@login_required
 def big_apply():
     form = BigForm()
     if form.validate_on_submit():
@@ -224,6 +241,7 @@ def big_apply():
         return render_template("big_application.html", form = form)
 
 @app.route("/bigview", methods = ['GET', 'POST'])
+@login_required
 def big_view():
     big_data = BigData.query.filter_by(email = current_user.email).first()
     form = BigBoxForm()
@@ -246,6 +264,7 @@ def big_view():
     return render_template("bigview.html", big_data = big_data, form = form)
 
 @app.route("/littleview", methods = ['GET', 'MOST'])
+@login_required
 def little_view():
     little_data = LittleData.query.filter_by(email = current_user.email).first()
     form = LittleBoxForm()
@@ -274,6 +293,7 @@ def little_view():
     return render_template("littleview.html", little_data = little_data, form = form)
 
 @app.route("/bigmales", methods = ['GET', 'MOST'])
+@login_required
 def bigmales():
     profile_list = PicutreData.query.all()
     bigmale_list = []
@@ -295,6 +315,7 @@ def bigmales():
     return render_template("bigmale.html", bigmale_list = bigmale_list, passing_list = passing_list)
 
 @app.route("/littlemales", methods = ['GET', 'POST'])
+@login_required
 def littlemales():
     profile_list = PicutreData.query.all()
     littlemale_list = []
@@ -316,6 +337,7 @@ def littlemales():
     return render_template("littlemale.html", littlemale_list=littlemale_list, passing_list=passing_list)
 
 @app.route("/bigfemales", methods = ['GET', 'POST'])
+@login_required
 def bigfemales():
     profile_list = PicutreData.query.all()
     bigfemale_list = []
@@ -337,6 +359,7 @@ def bigfemales():
     return render_template("bigfemale.html", bigfemale_list=bigfemale_list, passing_list=passing_list)
 
 @app.route("/littlefemales", methods = ['GET', 'POST'])
+@login_required
 def littlefemales():
     profile_list = PicutreData.query.all()
     littlefemale_list = []
@@ -358,6 +381,7 @@ def littlefemales():
     return render_template("littlefemale.html", littlefemale_list=littlefemale_list, passing_list=passing_list)
 
 @app.route("/otherprofile/<string:email_string>", methods = ['GET', 'POST'])
+@login_required
 def other_profile(email_string):
     profile_data = ProfileData.query.filter_by(vt_email=email_string).first()
     form = TextBox()
@@ -390,6 +414,7 @@ def save_picture(form_picture):
     return picture_fn
 
 @app.route("/modifyprofile", methods = ['GET', 'POST'])
+@login_required
 def profile():
     form = ProfileForm()
     if form.validate_on_submit():
@@ -419,6 +444,7 @@ def profile():
         return render_template("profile.html", form = form)
 
 @app.route("/viewprofile", methods = ['GET', 'POST'])
+@login_required
 def view_profile():
     profile_data = ProfileData.query.filter_by(vt_email = current_user.email).first()
     form = TextBox()
@@ -428,6 +454,7 @@ def view_profile():
     return render_template("viewprofile.html", profile_data = profile_data, form = form, picture_data = picture_data)
 
 @app.route("/updatepicture", methods = ['GET', 'POST'])
+@login_required
 def update_picture():
     form = UpdatePicture()
     if form.validate_on_submit():
@@ -455,6 +482,25 @@ def update_picture():
             return redirect(url_for("update_picture"))
     else:
         return render_template("updatepicture.html", form = form)
+
+@app.route("/adminlogin", methods = ['GET', 'POST'])
+def admin_login():
+    form = AdminLoginForm()
+    if form.validate_on_submit():
+        if str(form.email.data) == str("admin@vt.edu") and str(form.password.data) == str("@admin21"):
+            user = User.query.filter_by(email=form.email.data).first()
+            login_user(user)
+            flash("Successful admin login", "success")
+            return redirect(url_for("admin_home"))
+        else:
+            flash("Incorrect credentials", "danger")
+            return redirect(url_for("admin_login"))
+    else:
+        return render_template("adminlogin.html", form = form)
+
+@app.route("/adminhome", methods = ['GET', 'POST'])
+def admin_home():
+    return render_template("adminhome.html")
 
 @app.route("/logout")
 def logout():
@@ -489,6 +535,13 @@ class RegistrationForm(FlaskForm):
         email_string = User.query.filter_by(email = email.data).first()
         if email_string:
             raise ValidationError('That email is taken. Please choose a different one.')
+
+class AdminLoginForm(FlaskForm):
+    email_correct = "admin@vt.edu"
+    password_correct = "@admin21"
+    email = StringField("Email", validators = [DataRequired(), Email()])
+    password = PasswordField("Password", validators = [DataRequired()])
+    submit = SubmitField('Login')
 
 class LittleForm(FlaskForm):
     name = StringField("Name", validators = [Length(min = 0, max = 100)])
