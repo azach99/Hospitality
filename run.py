@@ -59,6 +59,10 @@ def make_user():
     db.session.add(input_user)
     db.session.commit()
 
+@app.route("/test", methods = ['GET', 'POST'])
+def test():
+    return render_template("othertest.html")
+
 @app.route("/login", methods = ['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
