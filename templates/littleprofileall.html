@@ -1,0 +1,147 @@
+{% extends "adminlayout.html" %}
+{% block content %}
+<style>
+        h1, h2, h3, h4, h5, h6 {
+            color: white
+        }
+        a {
+            color: white
+        }
+        p {
+            color: white
+        }
+        label {
+            color: white
+        }
+        body {
+             background-image: url("static/assets/img/portfolio/space.png");
+             background-color: #352c41;
+        }
+    </style>
+    <center>
+            <h1>{{ little_data.name }}</h1>
+            <h5>Grade: {{ little_data.grade }}</h5>
+            <h5>Email: {{ little_data.email }}</h5>
+            <h5>VT Address: {{ little_data.vt_address }}</h5>
+            <h5>Major(s)/Minor(s): {{ little_data.major }}</h5>
+            <h5>Phone: {{ little_data.phone }}</h5>
+            <h5>Gender: {{ little_data.gender }}</h5>
+            <h5>Birthplace: {{ little_data.birthplace }}</h5>
+            <br>
+            <div class = "col-md-12 mb-3">
+                {{ form.one.label(class = "form-control-label") }}
+                {{ form.one(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.two.label(class = "form-control-label") }}
+                {{ form.two(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.three.label(class = "form-control-label") }}
+                {{ form.three(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.four.label(class = "form-control-label") }}
+                {{ form.four(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.five.label(class = "form-control-label") }}
+                {{ form.five(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.six.label(class = "form-control-label") }}
+                {{ form.six(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.seven.label(class = "form-control-label") }}
+                {{ form.seven(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.eight.label(class = "form-control-label") }}
+                {{ form.eight(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.nine.label(class = "form-control-label") }}
+                {{ form.nine(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.ten.label(class = "form-control-label") }}
+                {{ form.ten(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.eleven.label(class = "form-control-label") }}
+                {{ form.eleven(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.twelve.label(class = "form-control-label") }}
+                {{ form.twelve(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.thirteen.label(class = "form-control-label") }}
+                {{ form.thirteen(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.fourteen.label(class = "form-control-label") }}
+                {{ form.fourteen(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.sixteen.label(class = "form-control-label") }}
+                {{ form.sixteen(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.seventeen.label(class = "form-control-label") }}
+                {{ form.seventeen(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.eighteen.label(class = "form-control-label") }}
+                {{ form.eighteen(class = "form-control form-control-lg")}}
+            </div>
+            <p>Which activities would you prefer to do with your Ate/Kuya?
+                (Please rank them 1-6, 1 = most preferred, 6 = leastpreferred)</p>
+            <p>1. {{ little_data.a_19 }}</p>
+            <p>2. {{ little_data.b_19 }}</p>
+            <p>3. {{ little_data.c_19 }}</p>
+            <p>4. {{ little_data.d_19 }}</p>
+            <p>5. {{ little_data.e_19 }}</p>
+            <p>6. {{ little_data.f_19 }}</p>
+            <div class = "col-md-12 mb-3">
+                {{ form.twenty.label(class = "form-control-label") }}
+                {{ form.twenty(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.twentyone.label(class = "form-control-label") }}
+                {{ form.twentyone(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.twentytwo.label(class = "form-control-label") }}
+                {{ form.twentytwo(class = "form-control form-control-lg")}}
+            </div>
+            <div class = "col-md-12 mb-3">
+                {{ form.twentythree.label(class = "form-control-label") }}
+                {{ form.twentythree(class = "form-control form-control-lg")}}
+            </div>
+
+
+
+            <h1>{{ profile_data.name }}</h1>
+            <h5>Username: {{ profile_data.username }}</h5>
+            <h5>Instagram: {{ profile_data.instagram }}</h5>
+            <h5>Twitter: {{ profile_data.twitter }}</h5>
+            <h5>Snapchat: {{ profile_data.snapchat }}</h5>
+            <h5>VT Email: {{ profile_data.vt_email }}</h5>
+            <h5>{{ profile_data.kind }}</h5>
+            <br>
+            <div class = "col-md-12 mb-3">
+                {{ form.textbox.label(class = "form-control-label") }}
+                {{ form.textbox(class = "form-control form-control-lg")}}
+            </div>
+        </center>
+
+
+
+
+
+
+
+
+{% endblock content %}

@@ -380,6 +380,96 @@ def littlefemales():
         pin = pin + 4
     return render_template("littlefemale.html", littlefemale_list=littlefemale_list, passing_list=passing_list)
 
+@app.route("/bigmaleadmin", methods = ['GET', 'POST'])
+@login_required
+def bigmale_admin():
+    profile_list = PicutreData.query.all()
+    bigmale_list = []
+    for user in profile_list:
+        if str(user.gender) == str("Male") and str(user.kind) == str("Big"):
+            bigmale_list.append(user)
+    iterations = len(bigmale_list) // 4
+    passing_list = []
+    if (len(bigmale_list) % 4 is not 0):
+        iterations = iterations + 1
+    pin = 0
+    for i in range(iterations):
+        end = pin + 4
+        if end > len(bigmale_list):
+            end = len(bigmale_list)
+        input_list = bigmale_list[pin: end]
+        passing_list.append(input_list)
+        pin = pin + 4
+    return render_template("bigmaleadmin.html", bigmale_list=bigmale_list, passing_list=passing_list)
+
+@app.route("/bigfemaleadmin", methods = ['GET', 'POST'])
+@login_required
+def bigfemale_admin():
+    profile_list = PicutreData.query.all()
+    bigfemale_list = []
+    for user in profile_list:
+        if str(user.gender) == str("Female") and str(user.kind) == str("Big"):
+            bigfemale_list.append(user)
+    iterations = len(bigfemale_list) // 4
+    passing_list = []
+    if (len(bigfemale_list) % 4 is not 0):
+        iterations = iterations + 1
+    pin = 0
+    for i in range(iterations):
+        end = pin + 4
+        if end > len(bigfemale_list):
+            end = len(bigfemale_list)
+        input_list = bigfemale_list[pin: end]
+        passing_list.append(input_list)
+        pin = pin + 4
+    return render_template("bigfemaleadmin.html", bigfemale_list=bigfemale_list, passing_list=passing_list)
+
+@app.route("/littlemaleadmin", methods = ['GET', 'POST'])
+@login_required
+def littlemale_admin():
+    profile_list = PicutreData.query.all()
+    littlemale_list = []
+    for user in profile_list:
+        if str(user.gender) == str("Male") and str(user.kind) == str("Little"):
+            littlemale_list.append(user)
+    iterations = len(littlemale_list) // 4
+    passing_list = []
+    if (len(littlemale_list) % 4 is not 0):
+        iterations = iterations + 1
+    pin = 0
+    for i in range(iterations):
+        end = pin + 4
+        if end > len(littlemale_list):
+            end = len(littlemale_list)
+        input_list = littlemale_list[pin: end]
+        passing_list.append(input_list)
+        pin = pin + 4
+    return render_template("littlemaleadmin.html", littlemale_list=littlemale_list, passing_list=passing_list)
+
+@app.route("/littlefemaleadmin", methods = ['GET', 'POST'])
+@login_required
+def littlefemale_admin():
+    profile_list = PicutreData.query.all()
+    littlefemale_list = []
+    for user in profile_list:
+        if str(user.gender) == str("Female") and str(user.kind) == str("Little"):
+            littlefemale_list.append(user)
+    iterations = len(littlefemale_list) // 4
+    passing_list = []
+    if (len(littlefemale_list) % 4 is not 0):
+        iterations = iterations + 1
+    pin = 0
+    for i in range(iterations):
+        end = pin + 4
+        if end > len(littlefemale_list):
+            end = len(littlefemale_list)
+        input_list = littlefemale_list[pin: end]
+        passing_list.append(input_list)
+        pin = pin + 4
+    return render_template("littlefemaleadmin.html", littlefemale_list=littlefemale_list, passing_list=passing_list)
+
+
+
 @app.route("/otherprofile/<string:email_string>", methods = ['GET', 'POST'])
 @login_required
 def other_profile(email_string):
@@ -389,6 +479,65 @@ def other_profile(email_string):
         form.textbox.data = profile_data.bio
     picture_data = PicutreData.query.filter_by(email=email_string).first()
     return render_template("otherprofile.html", profile_data=profile_data, form=form, picture_data=picture_data, pic = picture_data.pic)
+
+@app.route("/bigprofileall/<string:email_string>", methods = ['GET', 'POST'])
+@login_required
+def big_profile_all(email_string):
+    big_data = BigData.query.filter_by(email = email_string).first()
+    big_profile = ProfileData.query.filter_by(vt_email = email_string).first()
+    form = AllBigForm()
+    if big_data is not None:
+        form.four.data = big_data.four
+        form.five.data = big_data.five
+        form.six.data = big_data.six
+        form.seven.data = big_data.seven
+        form.eight.data = big_data.eight
+        form.ten.data = big_data.ten
+        form.eleven.data = big_data.eleven
+        form.twelve.data = big_data.twelve
+        form.thirteen.data = big_data.thirteen
+        form.fourteen.data = big_data.fourteen
+        form.fifteen.data = big_data.fifteen
+        form.sixteen.data = big_data.sixteen
+        form.eighteen.data = big_data.eighteen
+        form.twenty.data = big_data.twenty
+        form.twentyone.data = big_data.twentyone
+    if big_profile is not None:
+        form.textbox.data = big_profile.bio
+    return render_template("bigprofileall.html", form = form, big_data = big_data, profile_data = big_profile)
+
+@app.route("/littleprofileall/<string:email_string>", methods = ['GET', 'POST'])
+@login_required
+def little_profile_all(email_string):
+    little_data = LittleData.query.filter_by(email = email_string).first()
+    little_profile = ProfileData.query.filter_by(vt_email = email_string).first()
+    form = AllLittleForm()
+    if little_data is not None:
+        form.one.data = little_data.one
+        form.two.data = little_data.two
+        form.three.data = little_data.three
+        form.four.data = little_data.four
+        form.five.data = little_data.five
+        form.six.data = little_data.six
+        form.seven.data = little_data.seven
+        form.eight.data = little_data.eight
+        form.nine.data = little_data.nine
+        form.ten.data = little_data.ten
+        form.eleven.data = little_data.eleven
+        form.twelve.data = little_data.twelve
+        form.thirteen.data = little_data.thirteen
+        form.fourteen.data = little_data.fourteen
+        form.sixteen.data = little_data.sixteen
+        form.seventeen.data = little_data.seventeen
+        form.eighteen.data = little_data.eighteen
+        form.twenty.data = little_data.twenty
+        form.twentyone.data = little_data.twentyone
+        form.twentytwo.data = little_data.twentytwo
+        form.twentythree.data = little_data.twentythree
+    if little_profile is not None:
+        form.textbox.data = little_profile.bio
+    return render_template("littleprofileall.html", form = form, little_data = little_data, profile_data = little_profile)
+
 
 def secret_function():
     characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -508,7 +657,83 @@ def logout():
     flash("Successfully logged out", "success")
     return (redirect(url_for("home")))
 
+class AllBigForm(FlaskForm):
+    four = TextAreaField("What extracurricular activities are you currently involved in?",
+                         validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    five = TextAreaField("What are your favorite movies/TV shows?", validators=[Length(min=0, max=1000)],
+                         render_kw={"rows": 5, "cols": 0})
+    six = TextAreaField("What is your favorite song/artist/music genre?", validators=[Length(min=0, max=1000)],
+                        render_kw={"rows": 5, "cols": 0})
+    seven = TextAreaField("What are your hobbies and talents", validators=[Length(min=0, max=1000)],
+                          render_kw={"rows": 5, "cols": 0})
+    eight = TextAreaField("What is your biggest pet peeve?", validators=[Length(min=0, max=1000)],
+                          render_kw={"rows": 5, "cols": 0})
+    ten = TextAreaField("What is your favorite YouTube video?", validators=[Length(min=0, max=1000)],
+                        render_kw={"rows": 5, "cols": 0})
+    eleven = TextAreaField("What would you do with $1,000", validators=[Length(min=0, max=1000)],
+                           render_kw={"rows": 5, "cols": 0})
+    twelve = TextAreaField("If you had a drink named after you, what would be in it and why?",
+                           validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    thirteen = TextAreaField("What is your dream job/passion?", validators=[Length(min=0, max=1000)],
+                             render_kw={"rows": 5, "cols": 0})
+    fourteen = TextAreaField("What qualities do you look for in a friend?", validators=[Length(min=0, max=1000)],
+                             render_kw={"rows": 5, "cols": 0})
+    fifteen = TextAreaField("Are you a morning or night person?", validators=[Length(min=0, max=1000)],
+                            render_kw={"rows": 5, "cols": 0})
+    sixteen = TextAreaField("What is your guilty pleasure?", validators=[Length(min=0, max=1000)],
+                            render_kw={"rows": 5, "cols": 0})
+    eighteen = TextAreaField("Why do you want a little?", validators=[Length(min=0, max=1000)],
+                             render_kw={"rows": 5, "cols": 0})
+    twenty = TextAreaField("What does being a big mean to you?", validators=[Length(min=0, max=1000)],
+                           render_kw={"rows": 5, "cols": 0})
+    twentyone = TextAreaField("Is there anything else you want to share about yourself?",
+                              validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    textbox = TextAreaField("", render_kw={"rows": 5, "cols": 0})
 
+class AllLittleForm(FlaskForm):
+    one = TextAreaField("Do you have any preference for an Ate [female Big] or a Kuya [male Big]?",
+                        validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    two = TextAreaField("What is/are your favorite food(s)/drink(s)", validators=[Length(min=0, max=1000)],
+                        render_kw={"rows": 5, "cols": 0})
+    three = TextAreaField("Do you have any allergies?", validators=[Length(min=0, max=1000)],
+                          render_kw={"rows": 5, "cols": 0})
+    four = TextAreaField("Do you prefer to hang out in big groups or small groups?",
+                         validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    five = TextAreaField("What extracurricular activities are you currently involved in?",
+                         validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    six = TextAreaField("What are your favorite movies/TV shows?", validators=[Length(min=0, max=1000)],
+                        render_kw={"rows": 5, "cols": 0})
+    seven = TextAreaField("What is your favorite song/artist/music genre?", validators=[Length(min=0, max=1000)],
+                          render_kw={"rows": 5, "cols": 0})
+    eight = TextAreaField("What are your hobbies and talents?", validators=[Length(min=0, max=1000)],
+                          render_kw={"rows": 5, "cols": 0})
+    nine = TextAreaField("What is your biggest pet peeve?", validators=[Length(min=0, max=1000)],
+                         render_kw={"rows": 5, "cols": 0})
+    ten = TextAreaField("What is your favorite YouTube video?", validators=[Length(min=0, max=1000)],
+                        render_kw={"rows": 5, "cols": 0})
+    eleven = TextAreaField("What would you do with $1,000?", validators=[Length(min=0, max=1000)],
+                           render_kw={"rows": 5, "cols": 0})
+    twelve = TextAreaField("What is your dream job/passion?", validators=[Length(min=0, max=1000)],
+                           render_kw={"rows": 5, "cols": 0})
+    thirteen = TextAreaField("If you had a drink named after you, what would be in it?",
+                             validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    fourteen = TextAreaField("What qualities do you look for in a friend?", validators=[Length(min=0, max=1000)],
+                             render_kw={"rows": 5, "cols": 0})
+    sixteen = TextAreaField("What is your favorite color?", validators=[Length(min=0, max=1000)],
+                            render_kw={"rows": 5, "cols": 0})
+    seventeen = TextAreaField("Are you a morning or night person?", validators=[Length(min=0, max=1000)],
+                              render_kw={"rows": 5, "cols": 0})
+    eighteen = TextAreaField("What is your guilty pleasure?", validators=[Length(min=0, max=1000)],
+                             render_kw={"rows": 5, "cols": 0})
+    twenty = TextAreaField("Why do you want an Ate/Kuya", validators=[Length(min=0, max=1000)],
+                           render_kw={"rows": 5, "cols": 0})
+    twentyone = TextAreaField("What is your class schedule? Include location/room numbers and class",
+                              validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    twentytwo = TextAreaField("Is there anything else you want to share about yourself?",
+                              validators=[Length(min=0, max=1000)], render_kw={"rows": 5, "cols": 0})
+    twentythree = TextAreaField("Provide a message to your future big!", validators=[Length(min=0, max=1000)],
+                                render_kw={"rows": 5, "cols": 0})
+    textbox = TextAreaField("", render_kw={"rows": 5, "cols": 0})
 
 class LoginForm(FlaskForm):
     email = StringField("Email", validators = [DataRequired()])
