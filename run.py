@@ -787,6 +787,15 @@ def adminsearch_first_little():
     else:
         return render_template("adminsearchfirstlittle.html", form = form)
 
+@app.route("/findpairing", methods = ['GET', 'POST'])
+def find_pairing():
+    form = SearchBar()
+    if form.validate_on_submit():
+        pairing = PairingData.query.filter_by(pairing_key = form.search.data).first()
+        return render_template("resultspairing.html", pairing = pairing)
+    else:
+        return render_template("pairingsearch.html", form = form)
+
 @app.route("/adminhome", methods = ['GET', 'POST'])
 def admin_home():
     return render_template("adminhome.html")

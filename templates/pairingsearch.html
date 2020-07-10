@@ -1,0 +1,34 @@
+{% extends "adminlayout.html" %}
+{% block content %}
+<center>
+    <h1>Search Pairing by Key</h1>
+    <br>
+    <br>
+
+
+
+
+    <form class = "needs-validation" method = "POST">
+    {{ form.hidden_tag() }}
+    <div class = "col-md-6 mb-3">
+        {{ form.search.label(class = "form-control-label") }}
+        {% if form.search.errors %}
+            {% for error in form.search.errors %}
+                <span>{{ error }}</span>
+            {% endfor %}
+        {% else %}
+            {{ form.search(class = "form-control form-control-lg") }}
+        {% endif %}
+    </div>
+        <div class = "form-group">
+                {{ form.submit(class = "btn btn-outline-info")}}
+          </div>
+    </form>
+
+
+    <br>
+    <br>
+    <br>
+     </center>
+
+{% endblock content %}

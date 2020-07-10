@@ -1,0 +1,20 @@
+{% extends "adminlayout.html" %}
+{% block content %}
+<center>
+    <h1>Results</h1>
+    <br>
+    <br>
+        <div class = "row">
+            <div class="col-sm">
+          <label for="year">Pairing Key</label>
+            <h5><a href="{{ url_for('big_profile_all', email_string = pairing.big_email) }}">{{ pairing.pairing_key }}</a></h5>
+        </div>
+        </div>
+
+
+    <br>
+    <br>
+    <br>
+     </center>
+
+{% endblock content %}
