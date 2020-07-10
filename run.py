@@ -42,6 +42,20 @@ app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
 mail = Mail(app)
 confirmed = False
 
+def get_little_list():
+    little_list = LittleData.query.all()
+    names = []
+    for user in little_list:
+        names.append(user.name)
+    little_list_names = []
+    little_list_names.append(("None", "None"))
+    for user in names:
+        input_list = []
+        input_list.append(user)
+        input_list.append(user)
+        input_tuple = tuple(input_list)
+        little_list_names.append(input_tuple)
+    return little_list_names
 
 def restart():
     db.drop_all()
@@ -1121,21 +1135,9 @@ class PairingData(pairing_db.Model):
     pairing_key = pairing_db.Column(pairing_db.String(16))
 
 class PairingForm(FlaskForm):
-    little_list = LittleData.query.all()
-    names = []
-    for user in little_list:
-        names.append(user.name)
-    little_list_names = []
-    little_list_names.append(("None", "None"))
-    for user in names:
-        input_list = []
-        input_list.append(user)
-        input_list.append(user)
-        input_tuple = tuple(input_list)
-        little_list_names.append(input_tuple)
-    little_a = SelectField("Little A", choices = little_list_names)
-    little_b = SelectField("Little B", choices = little_list_names)
-    little_c = SelectField("Little C", choices = little_list_names)
+    little_a = SelectField("Little A", choices = get_little_list())
+    little_b = SelectField("Little B", choices = get_little_list())
+    little_c = SelectField("Little C", choices = get_little_list())
     submit = SubmitField("Save/Submit Pairing")
 
 
