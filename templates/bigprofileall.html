@@ -117,6 +117,61 @@
                 {{ form.textbox.label(class = "form-control-label") }}
                 {{ form.textbox(class = "form-control form-control-lg")}}
             </div>
+            <h3>Pairing</h3>
+            <form class = "needs-validation" method = "POST">
+                {{ pairing_form.hidden_tag() }}
+                <div class = "row">
+                <div class="col-sm">
+                  <label for="year">Little A</label>
+                  <!--<input type="text" class="form-control" id="year" placeholder="" required>-->
+                    {% if pairing_form.little_a.errors %}
+                        {{ pairing_form.little_a(class = "form-control form-control-lg is-invalid") }}
+                        <div class = "invalid-feedback">
+                            {% for error in pairing_form.little_a.errors %}
+                                <span> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ pairing_form.little_a(class = "form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="col-sm">
+                  <label for="year">Little B</label>
+                  <!--<input type="text" class="form-control" id="year" placeholder="" required>-->
+                    {% if pairing_form.little_b.errors %}
+                        {{ pairing_form.little_b(class = "form-control form-control-lg is-invalid") }}
+                        <div class = "invalid-feedback">
+                            {% for error in pairing_form.little_b.errors %}
+                                <span> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ pairing_form.little_b(class = "form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="col-sm">
+                  <label for="year">Little C</label>
+                  <!--<input type="text" class="form-control" id="year" placeholder="" required>-->
+                    {% if pairing_form.little_c.errors %}
+                        {{ pairing_form.little_c(class = "form-control form-control-lg is-invalid") }}
+                        <div class = "invalid-feedback">
+                            {% for error in pairing_form.little_c.errors %}
+                                <span> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ pairing_form.little_c(class = "form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                    <div class = "col-md-12 mb-3">
+                {{ pairing_form.submit(class = "btn btn-outline-info")}}
+                    </div>
+                    <br>
+                    <br>
+
+          </div>
+
+            </form>
         </center>
 
 

@@ -23,12 +23,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///little_data.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///big_data.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///profile_data.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///picture_data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pairing_data.db'
 
 db = SQLAlchemy(app)
 little_db = SQLAlchemy(app)
 big_db = SQLAlchemy(app)
 profile_db = SQLAlchemy(app)
 picture_db = SQLAlchemy(app)
+pairing_db = SQLAlchemy(app)
 
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
@@ -52,6 +54,8 @@ def restart():
     profile_db.create_all()
     picture_db.drop_all()
     picture_db.create_all()
+    pairing_db.drop_all()
+    pairing_db.create_all()
     admin_user = User(first_name = "Admin", last_name = "Admin", username = "admin",
                       email = "admin@vt.edu", kind = "Big", password = "@admin21",
                       key = secret_function())
@@ -504,7 +508,8 @@ def big_profile_all(email_string):
         form.twentyone.data = big_data.twentyone
     if big_profile is not None:
         form.textbox.data = big_profile.bio
-    return render_template("bigprofileall.html", form = form, big_data = big_data, profile_data = big_profile)
+    pairing_form = PairingForm()
+    return render_template("bigprofileall.html", form = form, big_data = big_data, profile_data = big_profile, pairing_form = pairing_form)
 
 @app.route("/littleprofileall/<string:email_string>", methods = ['GET', 'POST'])
 @login_required
@@ -546,7 +551,7 @@ def secret_function():
                   'n', 'o', 'p', 'q', 'r' ,'s','t', 'u', 'v', 'w', 'x', 'y', 'z',
                   '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
     start = ""
-    for i in range(64):
+    for i in range(8):
         n = random.randint(0, len(characters) - 1)
         start = "{}{}".format(start, characters[n])
     return start
@@ -1041,6 +1046,7 @@ class LittleData(little_db.Model):
     twentytwo = little_db.Column(little_db.String(1000))
     twentythree = little_db.Column(little_db.String(1000))
     key = little_db.Column(little_db.String(128))
+    big_key = little_db.Column(little_db.String(16))
 
 class BigData(big_db.Model):
     id = big_db.Column(big_db.Integer, primary_key = True)
@@ -1106,7 +1112,31 @@ class PicutreData(picture_db.Model):
     def __repr__(self):
         return "Picture({}, {}, {}, {})".format(self.email, self.kind, self.gender, self.pic)
 
+class PairingData(pairing_db.Model):
+    id = pairing_db.Column(pairing_db.Integer, primary_key = True)
+    big_email = pairing_db.Column(pairing_db.String(50))
+    little_email_one = pairing_db.Column(pairing_db.String(50))
+    little_email_two = pairing_db.Column(pairing_db.String(50))
+    little_email_three = pairing_db.Column(pairing_db.String(50))
+    pairing_key = pairing_db.Column(pairing_db.String(16))
 
+class PairingForm(FlaskForm):
+    little_list = LittleData.query.all()
+    names = []
+    for user in little_list:
+        names.append(user.name)
+    little_list_names = []
+    little_list_names.append(("None", "None"))
+    for user in names:
+        input_list = []
+        input_list.append(user)
+        input_list.append(user)
+        input_tuple = tuple(input_list)
+        little_list_names.append(input_tuple)
+    little_a = SelectField("Little A", choices = little_list_names)
+    little_b = SelectField("Little B", choices = little_list_names)
+    little_c = SelectField("Little C", choices = little_list_names)
+    submit = SubmitField("Save/Submit Pairing")
 
 
 
