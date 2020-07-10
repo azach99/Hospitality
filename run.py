@@ -761,6 +761,32 @@ def admin_login():
     else:
         return render_template("adminlogin.html", form = form)
 
+@app.route("/adminsearchfirstbig", methods = ['GET', 'POST'])
+def adminsearch_first():
+    form = SearchBar()
+    if form.validate_on_submit():
+        user_list = User.query.filter_by(first_name = form.search.data).all()
+        passing_list = []
+        for user in user_list:
+            if str("Big") == str(user.kind):
+                passing_list.append(user)
+        return render_template("results.html", passing_list = passing_list)
+    else:
+        return render_template("adminsearchfirst.html", form = form)
+
+@app.route("/adminsearchfirstlittle", methods = ['GET', 'POST'])
+def adminsearch_first_little():
+    form = SearchBar()
+    if form.validate_on_submit():
+        user_list = User.query.filter_by(first_name = form.search.data).all()
+        passing_list = []
+        for user in user_list:
+            if str("Little") == str(user.kind):
+                passing_list.append(user)
+        return render_template("resultslittle.html", passing_list = passing_list)
+    else:
+        return render_template("adminsearchfirstlittle.html", form = form)
+
 @app.route("/adminhome", methods = ['GET', 'POST'])
 def admin_home():
     return render_template("adminhome.html")
@@ -1086,6 +1112,10 @@ class TextBox(FlaskForm):
 class UpdatePicture(FlaskForm):
     picture = FileField("Update Profile Picture", validators = [FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
+
+class SearchBar(FlaskForm):
+    search = StringField("Search", validators = [DataRequired()])
+    submit = SubmitField("Submit")
 
 
 class User(db.Model, UserMixin):
