@@ -575,23 +575,42 @@ def big_profile_all(email_string):
         b = PairingData.query.filter_by(pairing_key = big_data.key).first()
         if (b is not None):
             PairingData.query.filter_by(pairing_key = big_data.key).delete()
-        input_pair = PairingData(big_email = big_data.email, little_email_one = LittleData.query.filter_by(name = pairing_form.little_a.data).first().email,
-                                 little_email_two = LittleData.query.filter_by(name = pairing_form.little_b.data).first().email,
-                                 little_email_three = LittleData.query.filter_by(name = pairing_form.little_c.data).first().email,
-                                 pairing_key = secret_function())
-        pairing_db.session.add(input_pair)
-        pairing_db.session.commit()
-        flash("Saved Pairing", "success")
-        return redirect(url_for("admin_home"))
+        if not str(pairing_form.little_a.data) == str("None") and not str(pairing_form.little_b.data) == str("None") and not str(pairing_form.little_c.data) == str("None"):
+            input_pair = PairingData(big_email = big_data.email, little_email_one = LittleData.query.filter_by(name = pairing_form.little_a.data).first().email,
+                                     little_email_two = LittleData.query.filter_by(name = pairing_form.little_b.data).first().email,
+                                     little_email_three = LittleData.query.filter_by(name = pairing_form.little_c.data).first().email,
+                                     pairing_key = big_data.key)
+            pairing_db.session.add(input_pair)
+            pairing_db.session.commit()
+            flash("Saved Pairing", "success")
+            return redirect(url_for("admin_home"))
+        elif not str(pairing_form.little_a.data) == str("None") and not str(pairing_form.little_b.data) == str("None"):
+            input_pair = PairingData(big_email=big_data.email, little_email_one=LittleData.query.filter_by(
+                name=pairing_form.little_a.data).first().email,
+                                     little_email_two=LittleData.query.filter_by(
+                                         name=pairing_form.little_b.data).first().email,
+                                     pairing_key=big_data.key)
+            pairing_db.session.add(input_pair)
+            pairing_db.session.commit()
+            flash("Saved Pairing", "success")
+            return redirect(url_for("admin_home"))
+        elif not str(pairing_form.little_a.data) == str("None"):
+            input_pair = PairingData(big_email=big_data.email, little_email_one=LittleData.query.filter_by(
+                name=pairing_form.little_a.data).first().email,
+                                     pairing_key=big_data.key)
+            pairing_db.session.add(input_pair)
+            pairing_db.session.commit()
+            flash("Saved Pairing", "success")
+            return redirect(url_for("admin_home"))
     else:
         q = PairingData.query.filter_by(pairing_key = big_data.key).first()
         if q is not None:
-            if LittleData.query.filter_by(email=q.little_email_one).first() is not None:
-                pairing_form.little_a.data = LittleData.query.filter_by(email = q.little_email_one).first().name
-            if LittleData.query.filter_by(email = q.little_email_two).first() is not None:
-                pairing_form.little_b.data = LittleData.query.filter_by(email = q.little_email_two).first().name
-            if LittleData.query.filter_by(email = q.little_email_three).first() is not None:
-                pairing_form.little_c.data = LittleData.query.filter_by(email = q.little_email_three).first().name
+            if (q.little_email_one):
+                pairing_form.little_a.data = LittleData.query.filter_by(email=q.little_email_one).first().name
+            if (q.little_email_two):
+                pairing_form.little_b.data = LittleData.query.filter_by(email=q.little_email_two).first().name
+            if (q.little_email_three):
+                pairing_form.little_c.data = LittleData.query.filter_by(email=q.little_email_three).first().name
         return render_template("bigprofileall.html", form = form, big_data = big_data, profile_data = big_profile, pairing_form = pairing_form)
 
 @app.route("/littleprofileall/<string:email_string>", methods = ['GET', 'POST'])
