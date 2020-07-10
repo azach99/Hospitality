@@ -84,6 +84,16 @@
                 {{ form.twentyone.label(class = "form-control-label") }}
                 {{ form.twentyone(class = "form-control form-control-lg")}}
             </div>
+            <h4>Littles</h4>
+            {% if one %}
+                <p>{{ one.name }}</p>
+            {% endif %}
+            {% if two %}
+                <p>{{ two.name }}</p>
+            {% endif %}
+            {% if three %}
+                <p>{{ three.name }}</p>
+            {% endif %}
         </center>
 
 

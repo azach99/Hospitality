@@ -279,7 +279,14 @@ def big_view():
         form.eighteen.data = big_data.eighteen
         form.twenty.data = big_data.twenty
         form.twentyone.data = big_data.twentyone
-    return render_template("bigview.html", big_data = big_data, form = form)
+    assign = PairingData.query.filter_by(big_email = current_user.email).first()
+    little_list = []
+    if assign is not None:
+        return render_template("bigview.html", big_data = big_data, form = form, one = LittleData.query.filter_by(email = assign.little_email_one).first(),
+                               two = LittleData.query.filter_by(email = assign.little_email_two).first(),
+                               three = LittleData.query.filter_by(email = assign.little_email_three).first())
+    else:
+        return render_template("bigview.html", big_data=big_data, form=form,one=None, two=None, three=None)
 
 @app.route("/littleview", methods = ['GET', 'MOST'])
 @login_required

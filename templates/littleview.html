@@ -103,6 +103,9 @@
                 {{ form.twentythree.label(class = "form-control-label") }}
                 {{ form.twentythree(class = "form-control form-control-lg")}}
             </div>
-
+            <h4>Pairing Key</h4>
+             {% if little_data.big_key %}
+                <p>{{ little_data.big_key }}</p>
+             {% endif %}
          </center>
 {% endblock content %}
