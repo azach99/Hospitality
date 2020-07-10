@@ -523,7 +523,76 @@ def big_profile_all(email_string):
     if big_profile is not None:
         form.textbox.data = big_profile.bio
     pairing_form = PairingForm()
-    return render_template("bigprofileall.html", form = form, big_data = big_data, profile_data = big_profile, pairing_form = pairing_form)
+    if pairing_form.validate_on_submit():
+        if not str(pairing_form.little_a.data) == str("None"):
+            find_1 = LittleData.query.filter_by(name = pairing_form.little_a.data).first()
+            input_1 = LittleData(name = find_1.name, grade = find_1.grade, email = find_1.email, phone = find_1.phone,
+                                 room_phone = find_1.room_phone, gender = find_1.gender, birthday = find_1.birthday,
+                                 birthplace = find_1.birthplace, vt_address = find_1.vt_address, major = find_1.major,
+                                 one = find_1.one, two = find_1.two, three = find_1.three, four = find_1.four, five = find_1.five,
+                                 six = find_1.six, seven = find_1.seven, eight = find_1.eight, nine = find_1.nine,
+                                 ten = find_1.ten, eleven = find_1.eleven, twelve = find_1.twelve, thirteen = find_1.thirteen,
+                                 fourteen = find_1.fourteen, sixteen = find_1.sixteen, seventeen = find_1.seventeen,
+                                 eighteen = find_1.eighteen, a_19 = find_1.a_19, b_19 = find_1.b_19, c_19 = find_1.c_19,
+                                 d_19 = find_1.d_19, e_19 = find_1.e_19, f_19 = find_1.f_19, twenty = find_1.twenty,
+                                 twentyone = find_1.twentyone, twentytwo = find_1.twentytwo, twentythree = find_1.twentythree,
+                                 key = find_1.key, big_key = big_data.key)
+            LittleData.query.filter_by(name = pairing_form.little_a.data).delete()
+            little_db.session.add(input_1)
+            little_db.session.commit()
+        if not str(pairing_form.little_b.data) == str("None"):
+            find_2 = LittleData.query.filter_by(name = pairing_form.little_b.data).first()
+            input_2 = LittleData(name = find_2.name, grade = find_2.grade, email = find_2.email, phone = find_2.phone,
+                                 room_phone = find_2.room_phone, gender = find_2.gender, birthday = find_2.birthday,
+                                 birthplace = find_2.birthplace, vt_address = find_2.vt_address, major = find_2.major,
+                                 one = find_2.one, two = find_2.two, three = find_2.three, four = find_2.four, five = find_2.five,
+                                 six = find_2.six, seven = find_2.seven, eight = find_2.eight, nine = find_2.nine,
+                                 ten = find_2.ten, eleven = find_2.eleven, twelve = find_2.twelve, thirteen = find_2.thirteen,
+                                 fourteen = find_2.fourteen, sixteen = find_2.sixteen, seventeen = find_2.seventeen,
+                                 eighteen = find_2.eighteen, a_19 = find_2.a_19, b_19 = find_2.b_19, c_19 = find_2.c_19,
+                                 d_19 = find_2.d_19, e_19 = find_2.e_19, f_19 = find_2.f_19, twenty = find_2.twenty,
+                                 twentyone = find_2.twentyone, twentytwo = find_2.twentytwo, twentythree = find_2.twentythree,
+                                 key = find_2.key, big_key = big_data.key)
+            LittleData.query.filter_by(name = pairing_form.little_b.data).delete()
+            little_db.session.add(input_2)
+            little_db.session.commit()
+        if not str(pairing_form.little_c.data) == str("None"):
+            find_3 = LittleData.query.filter_by(name = pairing_form.little_c.data).first()
+            input_3 = LittleData(name = find_3.name, grade = find_3.grade, email = find_3.email, phone = find_3.phone,
+                                 room_phone = find_3.room_phone, gender = find_3.gender, birthday = find_3.birthday,
+                                 birthplace = find_3.birthplace, vt_address = find_3.vt_address, major = find_3.major,
+                                 one = find_3.one, two = find_3.two, three = find_3.three, four = find_3.four, five = find_3.five,
+                                 six = find_3.six, seven = find_3.seven, eight = find_3.eight, nine = find_3.nine,
+                                 ten = find_3.ten, eleven = find_3.eleven, twelve = find_3.twelve, thirteen = find_3.thirteen,
+                                 fourteen = find_3.fourteen, sixteen = find_3.sixteen, seventeen = find_3.seventeen,
+                                 eighteen = find_3.eighteen, a_19 = find_3.a_19, b_19 = find_3.b_19, c_19 = find_3.c_19,
+                                 d_19 = find_3.d_19, e_19 = find_3.e_19, f_19 = find_3.f_19, twenty = find_3.twenty,
+                                 twentyone = find_3.twentyone, twentytwo = find_3.twentytwo, twentythree = find_3.twentythree,
+                                 key = find_3.key, big_key = big_data.key)
+            LittleData.query.filter_by(name = pairing_form.little_c.data).delete()
+            little_db.session.add(input_3)
+            little_db.session.commit()
+        b = PairingData.query.filter_by(pairing_key = big_data.key).first()
+        if (b is not None):
+            PairingData.query.filter_by(pairing_key = big_data.key).delete()
+        input_pair = PairingData(big_email = big_data.email, little_email_one = LittleData.query.filter_by(name = pairing_form.little_a.data).first().email,
+                                 little_email_two = LittleData.query.filter_by(name = pairing_form.little_b.data).first().email,
+                                 little_email_three = LittleData.query.filter_by(name = pairing_form.little_c.data).first().email,
+                                 pairing_key = secret_function())
+        pairing_db.session.add(input_pair)
+        pairing_db.session.commit()
+        flash("Saved Pairing", "success")
+        return redirect(url_for("admin_home"))
+    else:
+        q = PairingData.query.filter_by(pairing_key = big_data.key).first()
+        if q is not None:
+            if LittleData.query.filter_by(email=q.little_email_one).first() is not None:
+                pairing_form.little_a.data = LittleData.query.filter_by(email = q.little_email_one).first().name
+            if LittleData.query.filter_by(email = q.little_email_two).first() is not None:
+                pairing_form.little_b.data = LittleData.query.filter_by(email = q.little_email_two).first().name
+            if LittleData.query.filter_by(email = q.little_email_three).first() is not None:
+                pairing_form.little_c.data = LittleData.query.filter_by(email = q.little_email_three).first().name
+        return render_template("bigprofileall.html", form = form, big_data = big_data, profile_data = big_profile, pairing_form = pairing_form)
 
 @app.route("/littleprofileall/<string:email_string>", methods = ['GET', 'POST'])
 @login_required
