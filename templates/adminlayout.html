@@ -41,7 +41,7 @@
                 <div class="collapse navbar-collapse ">
                     <ul class="flex-md-column flex-row navbar-nav w-100 justify-content-between">
                         <li class="nav-item">
-                <h5><a class="nav-link" href="/">The Hive</a></h5>
+                <h5><a class="nav-link" href="/adminhome">The Hive</a></h5>
               </li>
                         {% if not current_user.is_authenticated %}
                 <li class="nav-item">
@@ -75,6 +75,9 @@
               </li>
             <li class="nav-item">
                   <a class="nav-link" href="/usersearchbig">Search - Pairing Key</a>
+              </li>
+                        <li class="nav-item">
+                  <a class="nav-link" href="/alert">Send Alerts</a>
               </li>
                 <li class="nav-item">
                   <a class="nav-link" href="/logout">Logout</a>

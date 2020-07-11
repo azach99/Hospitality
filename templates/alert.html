@@ -18,6 +18,20 @@
                 {{ form.textbox(class = "form-control form-control-lg") }}
             {% endif %}
         </div>
+        <div class="col-md-3 mb-3">
+          <label for="exampleFormControlTextarea1">Kind</label>
+          <!--<textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>-->
+            {% if form.kind.errors %}
+                {{ form.kind(class = "form-control form-control-lg is-invalid") }}
+                <div class = "invalid-feedback">
+                    {% for error in form.kind.errors %}
+                        <span> {{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.kind(class = "form-control form-control-lg") }}
+            {% endif %}
+        </div>
         <div class = "form-group">
           {{ form.submit(class = "btn btn-outline-info") }}
         </div>

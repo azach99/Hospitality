@@ -24,6 +24,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///big_data.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///profile_data.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///picture_data.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pairing_data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///alert_data.db'
 
 db = SQLAlchemy(app)
 little_db = SQLAlchemy(app)
@@ -31,6 +32,7 @@ big_db = SQLAlchemy(app)
 profile_db = SQLAlchemy(app)
 picture_db = SQLAlchemy(app)
 pairing_db = SQLAlchemy(app)
+alert_db = SQLAlchemy(app)
 
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
@@ -73,6 +75,8 @@ def restart():
     picture_db.create_all()
     pairing_db.drop_all()
     pairing_db.create_all()
+    alert_db.drop_all()
+    alert_db.create_all()
     admin_user = User(first_name = "Admin", last_name = "Admin", username = "admin",
                       email = "admin@vt.edu", kind = "Big", password = "@admin21",
                       key = secret_function())
@@ -851,10 +855,54 @@ def find_pairing():
 def alert():
     form = AlertForm()
     if form.validate_on_submit():
+        input_alert = AlertData(content = form.textbox.data, kind = form.kind.data)
+        alert_db.session.add(input_alert)
+        alert_db.session.commit()
         flash("Alert has been sent", "success")
         return redirect(url_for("alert"))
     else:
         return render_template("alert.html", form = form)
+
+@app.route("/bigalerts", methods = ['GET', 'POST'])
+@login_required
+def big_alerts():
+    alert_list = AlertData.query.all()
+    filtered_list = []
+    for alert in alert_list:
+        if str(alert.kind) == str("Bigs") or str(alert.kind) == str("Both"):
+            filtered_list.append(alert)
+    backwards_list = []
+    i = len(filtered_list) - 1
+    while i >= 0:
+        backwards_list.append(filtered_list[i])
+        i = i - 1
+    textbox_list = []
+    for i in range(len(backwards_list)):
+        form = TextBox()
+        form.textbox.data = backwards_list[i].content
+        textbox_list.append(form)
+    return render_template("viewalerts.html", textbox_list = textbox_list)
+
+
+@app.route("/littlealerts", methods = ['GET', 'POST'])
+@login_required
+def little_alerts():
+    alert_list = AlertData.query.all()
+    filtered_list = []
+    for alert in alert_list:
+        if str(alert.kind) == str("Little") or str(alert.kind) == str("Both"):
+            filtered_list.append(alert)
+    backwards_list = []
+    i = len(filtered_list) - 1
+    while i >= 0:
+        backwards_list.append(filtered_list[i])
+        i = i - 1
+    textbox_list = []
+    for i in range(len(backwards_list)):
+        form = TextBox()
+        form.textbox.data = backwards_list[i].content
+        textbox_list.append(form)
+    return render_template("viewalerts.html", textbox_list = textbox_list)
 
 @app.route("/adminhome", methods = ['GET', 'POST'])
 def admin_home():
@@ -1181,6 +1229,7 @@ class TextBox(FlaskForm):
 
 class AlertForm(FlaskForm):
     textbox = TextAreaField("Enter Alert", render_kw = {"rows": 5, "cols": 0})
+    kind = SelectField('Kind', choices = [("Select", "Select"), ("Bigs", "Bigs"), ("Littles", "Littles"), ("Both", "Both")])
     submit = SubmitField("Submit")
 
 class UpdatePicture(FlaskForm):
@@ -1333,6 +1382,12 @@ class PairingData(pairing_db.Model):
     little_email_two = pairing_db.Column(pairing_db.String(50))
     little_email_three = pairing_db.Column(pairing_db.String(50))
     pairing_key = pairing_db.Column(pairing_db.String(16))
+
+class AlertData(alert_db.Model):
+    id = alert_db.Column(alert_db.Integer, primary_key = True)
+    content = alert_db.Column(db.String(1000))
+    kind = alert_db.Column(db.String(100))
+
 
 class PairingForm(FlaskForm):
     little_a = SelectField("Little A", choices = name_list)
