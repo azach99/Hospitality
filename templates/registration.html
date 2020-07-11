@@ -99,6 +99,19 @@
               {{ form.kind(class = "form-control form-control-lg")}}
             {% endif %}
           </div>
+          <div class = "col-md-12 mb-3">
+            {{ form.gender.label(class = "form-control-label") }}
+            {% if form.gender.errors %}
+              {{ form.gender(class = "form-control form-control-lg is-invalid")}}
+              <div class = "invalid-feedback">
+                {% for error in form.gender.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.gender(class = "form-control form-control-lg")}}
+            {% endif %}
+          </div>
           <br>
           <br>
           <div class = "col-md-12 mb-3">

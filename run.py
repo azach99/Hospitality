@@ -121,7 +121,7 @@ def register():
         hashed = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         key = secret_function()
         input_user = User(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data,
-                          username=form.username.data, password=hashed, kind = form.kind.data, key = key)
+                          username=form.username.data, password=hashed, kind = form.kind.data, key = key, gender = form.gender.data)
         db.session.add(input_user)
         db.session.commit()
         flash("Account Created for {}".format(form.username.data), 'success')
@@ -133,6 +133,9 @@ def register():
 @login_required
 def little_apply():
     form = LittleForm()
+    form.name.data = "{} {}".format(current_user.first_name, current_user.last_name)
+    form.email.data = current_user.email
+    form.gender.data = current_user.gender
     if form.validate_on_submit():
         '''filter the database by email, if it exists, delete that entry'''
         q = LittleData.query.filter_by(email = current_user.email).first()
@@ -200,6 +203,9 @@ def little_apply():
 @login_required
 def big_apply():
     form = BigForm()
+    form.name.data = "{} {}".format(current_user.first_name, current_user.last_name)
+    form.email.data = current_user.email
+    form.gender.data = current_user.gender
     if form.validate_on_submit():
         '''filter the database by email, if it exists, delete that entry'''
         q = BigData.query.filter_by(email=current_user.email).first()
@@ -680,6 +686,10 @@ def save_picture(form_picture):
 @login_required
 def profile():
     form = ProfileForm()
+    form.vt_email.data = current_user.email
+    form.kind.data = current_user.kind
+    form.gender.data = current_user.gender
+    form.name.data = "{} {}".format(current_user.first_name, current_user.last_name)
     if form.validate_on_submit():
         q = ProfileData.query.filter_by(vt_email=current_user.email).first()
         if q is not None:
@@ -924,6 +934,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators = [DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators = [DataRequired(), EqualTo('password')])
     kind = SelectField('Applicant', validators = [DataRequired()], choices = [("Select", "Select"), ("Big", "Big"), ("Little", "Little")])
+    gender = SelectField('Gender', validators = [DataRequired()], choices = [("Select", "Select"), ("Male", "Male"), ("Female", "Female"), ("Other", "Other")])
     submit = SubmitField('Register')
 
     def validate_username(self, username):
@@ -1162,6 +1173,7 @@ class User(db.Model, UserMixin):
     kind = db.Column(db.String(120))
     password = db.Column(db.String(60))
     key = db.Column(db.String(128))
+    gender = db.Column(db.String(50))
 
     def __repr__(self):
         return "User({}, {}, {}, {}, {})".format(self.first_name, self.last_name, self.username, self.email, self.kind)

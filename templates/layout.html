@@ -20,6 +20,9 @@
           <li class="nav-item active">
             <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
           </li>
+            <li class="nav-item">
+                <h5><a class="nav-link" href="/login">The Hive</a></h5>
+              </li>
             {% if not current_user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="/login">Login</a>
@@ -29,9 +32,6 @@
               </li>
             {% endif %}
             {% if current_user.is_authenticated %}
-                <li class="nav-item">
-                  <a class="nav-link" href="/logout">Logout</a>
-              </li>
                 <li class="nav-item">
                   <a class="nav-link" href="/account">Account</a>
               </li>
@@ -50,6 +50,9 @@
             {% endif %}
             <li class="nav-item">
                 <a class="nav-link" href="/contact">Contact Info</a>
+              </li>
+            <li class="nav-item">
+                  <a class="nav-link" href="/logout">Logout</a>
               </li>
         </ul>
       </div>
