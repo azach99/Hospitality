@@ -41,6 +41,9 @@ app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
 app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
 mail = Mail(app)
 confirmed = False
+name_list = []
+
+name_list.append(("None", "None"))
 
 def get_little_list():
     little_list = LittleData.query.all()
@@ -142,6 +145,17 @@ def little_apply():
         if (q is not None):
             LittleData.query.filter_by(email = current_user.email).delete()
         key = secret_function()
+        turn_list = []
+        turn_list.append(form.name.data)
+        turn_list.append(form.name.data)
+        input_tuple = tuple(turn_list)
+        duplicate = False
+        for tup in name_list:
+            if tup == input_tuple:
+                duplicate = True
+        if not duplicate:
+            name_list.append(input_tuple)
+
         input_little = LittleData(name = form.name.data, grade = form.grade.data, email = form.email.data,
                                   phone = form.phone.data, room_phone = form.room_phone.data, gender = form.gender.data,
                                   birthday = form.birthday.data, birthplace = form.birthplace.data, vt_address = form.vt_address.data,
@@ -832,6 +846,16 @@ def find_pairing():
     else:
         return render_template("pairingsearch.html", form = form)
 
+@app.route("/alert", methods = ['GET', 'POST'])
+@login_required
+def alert():
+    form = AlertForm()
+    if form.validate_on_submit():
+        flash("Alert has been sent", "success")
+        return redirect(url_for("alert"))
+    else:
+        return render_template("alert.html", form = form)
+
 @app.route("/adminhome", methods = ['GET', 'POST'])
 def admin_home():
     return render_template("adminhome.html")
@@ -1155,6 +1179,10 @@ class ProfileForm(FlaskForm):
 class TextBox(FlaskForm):
     textbox = TextAreaField("", render_kw={"rows": 5, "cols": 0})
 
+class AlertForm(FlaskForm):
+    textbox = TextAreaField("Enter Alert", render_kw = {"rows": 5, "cols": 0})
+    submit = SubmitField("Submit")
+
 class UpdatePicture(FlaskForm):
     picture = FileField("Update Profile Picture", validators = [FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
@@ -1307,9 +1335,9 @@ class PairingData(pairing_db.Model):
     pairing_key = pairing_db.Column(pairing_db.String(16))
 
 class PairingForm(FlaskForm):
-    little_a = SelectField("Little A", choices = get_little_list())
-    little_b = SelectField("Little B", choices = get_little_list())
-    little_c = SelectField("Little C", choices = get_little_list())
+    little_a = SelectField("Little A", choices = name_list)
+    little_b = SelectField("Little B", choices = name_list)
+    little_c = SelectField("Little C", choices = name_list)
     submit = SubmitField("Save/Submit Pairing")
 
 

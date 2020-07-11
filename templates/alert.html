@@ -1,0 +1,26 @@
+{% extends "adminlayout.html" %}
+{% block content %}
+    <center>
+    <h1>Alert Form</h1>
+    <form class = "needs-validation" method = "POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+          <label for="exampleFormControlTextarea1">Enter Alert</label>
+          <!--<textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>-->
+            {% if form.textbox.errors %}
+                {{ form.textbox(class = "form-control form-control-lg is-invalid") }}
+                <div class = "invalid-feedback">
+                    {% for error in form.textbox.errors %}
+                        <span> {{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.textbox(class = "form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class = "form-group">
+          {{ form.submit(class = "btn btn-outline-info") }}
+        </div>
+    </form>
+        </center>
+{% endblock content%}
