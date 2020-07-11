@@ -787,6 +787,32 @@ def adminsearch_first_little():
     else:
         return render_template("adminsearchfirstlittle.html", form = form)
 
+@app.route("/usersearchbig", methods = ['GET', 'POST'])
+def usersearch_big():
+    form = SearchBar()
+    if form.validate_on_submit():
+        user_list = User.query.filter_by(first_name= form.search.data).all()
+        passing_list = []
+        for user in user_list:
+            if str("Big") == str(user.kind):
+                passing_list.append(user)
+        return render_template("userbigresults.html", passing_list = passing_list)
+    else:
+        return render_template("usersearchbig.html", form = form)
+
+@app.route("/usersearchlittle", methods = ['GET', 'POST'])
+def usersearch_little():
+    form = SearchBar()
+    if form.validate_on_submit():
+        user_list = User.query.filter_by(first_name = form.search.data).all()
+        passing_list = []
+        for user in user_list:
+            if str("Little") == str(user.kind):
+                passing_list.append(user)
+        return render_template("userlittleresults.html", passing_list = passing_list)
+    else:
+        return render_template("usersearchlittle.html", form = form)
+
 @app.route("/findpairing", methods = ['GET', 'POST'])
 def find_pairing():
     form = SearchBar()

@@ -1,0 +1,26 @@
+{% extends "adminlayout.html" %}
+{% block content %}
+<center>
+    <h1>Results</h1>
+    <br>
+    <br>
+
+
+
+
+    {% for user in passing_list%}
+        <div class = "row">
+            <div class="col-sm">
+          <label for="year">Name</label>
+            <h5><a href="{{ url_for('other_profile', email_string = user.email) }}">{{ user.first_name }} {{ user.last_name }}</a></h5>
+        </div>
+        </div>
+    {% endfor %}
+
+
+    <br>
+    <br>
+    <br>
+     </center>
+
+{% endblock content %}
