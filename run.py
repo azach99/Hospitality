@@ -13,6 +13,7 @@ from flask_wtf.file import FileField, FileAllowed
 import secrets
 from PIL import Image
 import os
+import smtplib
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ej6swibjsk6920bj14jdzej79hfssr63fgbs'
@@ -904,6 +905,59 @@ def little_alerts():
         textbox_list.append(form)
     return render_template("viewalerts.html", textbox_list = textbox_list)
 
+@app.route("/reset_password", methods = ['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email = form.email.data).first()
+        send_reset_email(user)
+        flash('An email has been sent with instructions to reset your password.', 'info')
+        return redirect(url_for('login'))
+    return render_template('reset_request.html', title = 'Reset Password', form = form)
+
+
+"""
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Password Reset Request', sender = 'noreply@demo.com', recipients = [user.email])
+    msg.body = '''To reset your password, visit the following link: {}. If you did not make this request then simply ignore this email and no changes will be made'''.format(url_for('reset_token', token = token), external = True)
+    mail.send(msg)
+"""
+
+def send_reset_email(user):
+    smtpObj = smtplib.SMTP('smtp.gmail.com')
+    token = user.get_reset_token()
+    sender = 'noreply@demo.com'
+    receivers = user.email
+    message = """ From: noreply@demo.com
+    To: {}
+    Subject: Reset Password
+    To reset your password, visit the following link: {}. If you did not make this request then please ignore this email and no changes will be made.
+    """.format(receivers, url_for('reset_token', token = token))
+    smtpObj.starttls()
+    smtpObj.sendmail(sender, receivers, message)
+
+
+@app.route("/reset_password/<token>", methods = ['GET', 'POST'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+    user = User.verify_reset_token(token)
+    if (user is None):
+        flash('That is an invalid or expired token', 'warning')
+        return redirect(url_for('reset_request'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hashed_password
+        db.session.commit()
+        #flash("Account Created for {}".format(form.username.data), 'success')
+        flash("success", "success")
+        return redirect(url_for('login'))
+    return render_template('reset_token.html', title = 'Reset Password', form = form)
+
 @app.route("/adminhome", methods = ['GET', 'POST'])
 def admin_home():
     return render_template("adminhome.html")
@@ -1395,7 +1449,19 @@ class PairingForm(FlaskForm):
     little_c = SelectField("Little C", choices = name_list)
     submit = SubmitField("Save/Submit Pairing")
 
+class RequestResetForm(FlaskForm):
+    email = StringField('Email', validators = [DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
 
+    def validate_username(self, username):
+        user = User.query.filter_by(username = username.data).first()
+        if user is None:
+            raise ValidationError('There is no account with that email. You must register first.')
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')
 
 if __name__ == '__main__':
     app.run(debug = True)
