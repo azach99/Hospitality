@@ -102,6 +102,10 @@
                 {{ form.twentyone.label(class = "form-control-label") }}
                 {{ form.twentyone(class = "form-control form-control-lg")}}
             </div>
+            {% if key %}
+                <h6>Big Key</h6>
+                <p>{{ key }}</p>
+            {% endif %}
 
 
 

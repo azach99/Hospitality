@@ -300,7 +300,10 @@ def big_apply():
             form.eighteen.data = q.eighteen
             form.twenty.data = q.twenty
             form.twentyone.data = q.twentyone
-        return render_template("big_application.html", form = form)
+            key = q.key
+        else:
+            key = None
+        return render_template("big_application.html", form = form, key = key)
 
 @app.route("/bigview", methods = ['GET', 'POST'])
 @login_required
