@@ -132,7 +132,8 @@ def register():
         hashed = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         key = secret_function()
         input_user = User(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data,
-                          username=form.username.data, password=hashed, kind = form.kind.data, key = key, gender = form.gender.data)
+                          username=form.username.data, password=hashed, kind = form.kind.data, key = key, gender = form.gender.data,
+                          submitted_application = "False", submitted_profile = "False", submitted_picture = "False")
         db.session.add(input_user)
         db.session.commit()
         flash("Account Created for {}".format(form.username.data), 'success')
@@ -176,6 +177,14 @@ def little_apply():
                                   twentyone = form.twentyone.data, twentytwo = form.twentytwo.data, twentythree = form.twentythree.data, key = key)
         little_db.session.add(input_little)
         little_db.session.commit()
+        q = User.query.filter_by(email=current_user.email).first()
+        enter = User(first_name=q.first_name, last_name=q.last_name, username=q.username,
+                     email=q.email, kind=q.kind, password=q.password, key=q.key, gender=q.gender,
+                     submitted_application="True", submitted_profile=q.submitted_profile,
+                     submitted_picture=q.submitted_picture)
+        User.query.filter_by(email=current_user.email).delete()
+        db.session.add(enter)
+        db.session.commit()
         flash("Saved Application for {}".format(form.name.data), 'success')
         return redirect(url_for('home'))
     else:
@@ -246,6 +255,13 @@ def big_apply():
                             twentyone = form.twentyone.data, key = key)
         big_db.session.add(input_big)
         big_db.session.commit()
+        q = User.query.filter_by(email = current_user.email).first()
+        enter = User(first_name = q.first_name, last_name = q.last_name, username = q.username,
+                     email = q.email, kind = q.kind, password = q.password, key = q.key, gender = q.gender,
+                     submitted_application = "True", submitted_profile = q.submitted_profile, submitted_picture = q.submitted_picture)
+        User.query.filter_by(email = current_user.email).delete()
+        db.session.add(enter)
+        db.session.commit()
         flash("Saved Application for {}".format(form.name.data), 'success')
         return redirect(url_for('home'))
     else:
@@ -707,36 +723,50 @@ def save_picture(form_picture):
 @app.route("/modifyprofile", methods = ['GET', 'POST'])
 @login_required
 def profile():
-    form = ProfileForm()
-    form.vt_email.data = current_user.email
-    form.kind.data = current_user.kind
-    form.gender.data = current_user.gender
-    form.name.data = "{} {}".format(current_user.first_name, current_user.last_name)
-    if form.validate_on_submit():
-        q = ProfileData.query.filter_by(vt_email=current_user.email).first()
-        if q is not None:
-            ProfileData.query.filter_by(vt_email = current_user.email).delete()
-        key = secret_function()
-        input_profile = ProfileData(name = form.name.data, username = form.username.data, bio = form.bio.data,
-                                    instagram = form.instagram.data, twitter = form.twitter.data, snapchat = form.snapchat.data,
-                                    vt_email = form.vt_email.data, kind = form.kind.data, gender = form.gender.data, key = key)
-        profile_db.session.add(input_profile)
-        profile_db.session.commit()
-        flash("Updated Profile", 'success')
-        return redirect(url_for("home"))
+    if str(current_user.submitted_application) == str("True"):
+        form = ProfileForm()
+        form.vt_email.data = current_user.email
+        form.kind.data = current_user.kind
+        form.gender.data = current_user.gender
+        form.name.data = "{} {}".format(current_user.first_name, current_user.last_name)
+        if form.validate_on_submit():
+            q = ProfileData.query.filter_by(vt_email=current_user.email).first()
+            if q is not None:
+                ProfileData.query.filter_by(vt_email = current_user.email).delete()
+            key = secret_function()
+            input_profile = ProfileData(name = form.name.data, username = form.username.data, bio = form.bio.data,
+                                        instagram = form.instagram.data, twitter = form.twitter.data, snapchat = form.snapchat.data,
+                                        vt_email = form.vt_email.data, kind = form.kind.data, gender = form.gender.data, key = key)
+            profile_db.session.add(input_profile)
+            profile_db.session.commit()
+            q = User.query.filter_by(email = current_user.email).first()
+            enter = User(first_name=q.first_name, last_name=q.last_name, username=q.username,
+                         email=q.email, kind=q.kind, password=q.password, key=q.key, gender=q.gender,
+                         submitted_application="True", submitted_profile="True", submitted_picture=q.submitted_picture)
+            User.query.filter_by(email=current_user.email).delete()
+            db.session.add(enter)
+            db.session.commit()
+            flash("Updated Profile", 'success')
+            return redirect(url_for("home"))
+        else:
+            q = ProfileData.query.filter_by(vt_email=current_user.email).first()
+            if (q is not None):
+                form.name.data = q.name
+                form.username.data = q.username
+                form.bio.data = q.bio
+                form.instagram.data = q.instagram
+                form.twitter.data = q.twitter
+                form.snapchat.data = q.snapchat
+                form.vt_email.data = q.vt_email
+                form.kind.data = q.kind
+                form.gender.data = q.gender
+            return render_template("profile.html", form = form)
     else:
-        q = ProfileData.query.filter_by(vt_email=current_user.email).first()
-        if (q is not None):
-            form.name.data = q.name
-            form.username.data = q.username
-            form.bio.data = q.bio
-            form.instagram.data = q.instagram
-            form.twitter.data = q.twitter
-            form.snapchat.data = q.snapchat
-            form.vt_email.data = q.vt_email
-            form.kind.data = q.kind
-            form.gender.data = q.gender
-        return render_template("profile.html", form = form)
+        flash("Save your application before you continue to your profile", "danger")
+        if (str(current_user.kind) == str("Big")):
+            return redirect(url_for("big_apply"))
+        else:
+            return redirect(url_for("little_apply"))
 
 @app.route("/viewprofile", methods = ['GET', 'POST'])
 @login_required
@@ -751,32 +781,43 @@ def view_profile():
 @app.route("/updatepicture", methods = ['GET', 'POST'])
 @login_required
 def update_picture():
-    form = UpdatePicture()
-    if form.validate_on_submit():
-        quest = ProfileData.query.filter_by(vt_email = current_user.email).first()
-        if (quest is None):
-            flash("Complete the Profile Form first to update your profile picture", "danger")
-            return redirect(url_for("profile"))
-        elif (quest.vt_email is None):
-            flash("Enter your VT Email in the Profile form to update your profile pic", "danger")
-            return (redirect(url_for("profile")))
+    if str(current_user.submitted_profile) == str("True"):
+        form = UpdatePicture()
+        if form.validate_on_submit():
+            quest = ProfileData.query.filter_by(vt_email = current_user.email).first()
+            if (quest is None):
+                flash("Complete the Profile Form first to update your profile picture", "danger")
+                return redirect(url_for("profile"))
+            elif (quest.vt_email is None):
+                flash("Enter your VT Email in the Profile form to update your profile pic", "danger")
+                return (redirect(url_for("profile")))
+            else:
+                q = PicutreData.query.filter_by(email = current_user.email).first()
+                if q is not None:
+                    PicutreData.query.filter_by(email = current_user.email).delete()
+                key = secret_function()
+                email = current_user.email
+                pic = save_picture(form.picture.data)
+                kind = quest.kind
+                gender = quest.gender
+                enter = PicutreData(key = key, email = email, kind = kind,
+                                    gender = gender, pic = pic, name = quest.name)
+                picture_db.session.add(enter)
+                picture_db.session.commit()
+                q = User.query.filter_by(email=current_user.email).first()
+                enter = User(first_name=q.first_name, last_name=q.last_name, username=q.username,
+                             email=q.email, kind=q.kind, password=q.password, key=q.key, gender=q.gender,
+                             submitted_application="True", submitted_profile="True", submitted_picture="True")
+                User.query.filter_by(email=current_user.email).delete()
+                db.session.add(enter)
+                db.session.commit()
+                flash("Successful Picture Change", 'success')
+                return redirect(url_for("update_picture"))
         else:
-            q = PicutreData.query.filter_by(email = current_user.email).first()
-            if q is not None:
-                PicutreData.query.filter_by(email = current_user.email).delete()
-            key = secret_function()
-            email = current_user.email
-            pic = save_picture(form.picture.data)
-            kind = quest.kind
-            gender = quest.gender
-            enter = PicutreData(key = key, email = email, kind = kind,
-                                gender = gender, pic = pic, name = quest.name)
-            picture_db.session.add(enter)
-            picture_db.session.commit()
-            flash("Successful Picture Change", 'success')
-            return redirect(url_for("update_picture"))
+            return render_template("updatepicture.html", form = form)
     else:
-        return render_template("updatepicture.html", form = form)
+        flash("You must complete your profile in order to update your picture", "danger")
+        return redirect(url_for("profile"))
 
 @app.route("/adminlogin", methods = ['GET', 'POST'])
 def admin_login():
@@ -1308,6 +1349,9 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60))
     key = db.Column(db.String(128))
     gender = db.Column(db.String(50))
+    submitted_application = db.Column(db.String(10))
+    submitted_profile = db.Column(db.String(10))
+    submitted_picture = db.Column(db.String(10))
 
     def __repr__(self):
         return "User({}, {}, {}, {}, {})".format(self.first_name, self.last_name, self.username, self.email, self.kind)
@@ -1325,6 +1369,8 @@ class User(db.Model, UserMixin):
         except:
             return None
         return User.query.get(user_id)
+
+
 
 class LittleData(little_db.Model):
     id = little_db.Column(little_db.Integer, primary_key = True)
