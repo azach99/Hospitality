@@ -101,9 +101,6 @@ def make_user():
     db.session.add(input_user)
     db.session.commit()
 
-@app.route("/test", methods = ['GET', 'POST'])
-def test():
-    return render_template("othertest.html")
 
 @app.route("/login", methods = ['GET', 'POST'])
 def login():
@@ -123,6 +120,7 @@ def login():
         return render_template('login.html', title="Login", form=form)
 
 @app.route("/userhome", methods = ['GET', 'POST'])
+@login_required
 def user_home():
     return render_template("userhome.html")
 
@@ -131,6 +129,7 @@ def about():
     return render_template("about.html")
 
 @app.route("/unpairedbigs", methods = ['GET', 'POST'])
+@login_required
 def unpaired_bigs():
     unpaired_names = []
     all_bigs = BigData.query.all()
@@ -143,6 +142,7 @@ def unpaired_bigs():
     return render_template("unpaired.html", unpaired_names = unpaired_names, tag = "Big")
 
 @app.route("/unpairedlittles", methods = ['GET', 'POST'])
+@login_required
 def unpaired_littles():
     unpaired_names = []
     all_littles = LittleData.query.all()
@@ -608,6 +608,12 @@ def big_profile_all(email_string):
     if big_profile is not None:
         form.textbox.data = big_profile.bio
     pairing_form = PairingForm()
+    little_list = LittleData.query.all()
+    names = [(user.name, user.name) for user in little_list]
+    names.append(("None", "None"))
+    pairing_form.little_a.choices = names
+    pairing_form.little_b.choices = names
+    pairing_form.little_c.choices = names
     if pairing_form.validate_on_submit():
         if not str(pairing_form.little_a.data) == str("None"):
             find_1 = LittleData.query.filter_by(name = pairing_form.little_a.data).first()
@@ -870,6 +876,7 @@ def admin_login():
         return render_template("adminlogin.html", form = form)
 
 @app.route("/adminsearchfirstbig", methods = ['GET', 'POST'])
+@login_required
 def adminsearch_first():
     form = SearchBar()
     if form.validate_on_submit():
@@ -883,6 +890,7 @@ def adminsearch_first():
         return render_template("adminsearchfirst.html", form = form)
 
 @app.route("/adminsearchfirstlittle", methods = ['GET', 'POST'])
+@login_required
 def adminsearch_first_little():
     form = SearchBar()
     if form.validate_on_submit():
@@ -896,6 +904,7 @@ def adminsearch_first_little():
         return render_template("adminsearchfirstlittle.html", form = form)
 
 @app.route("/usersearchbig", methods = ['GET', 'POST'])
+@login_required
 def usersearch_big():
     form = SearchBar()
     if form.validate_on_submit():
@@ -909,6 +918,7 @@ def usersearch_big():
         return render_template("usersearchbig.html", form = form)
 
 @app.route("/usersearchlittle", methods = ['GET', 'POST'])
+@login_required
 def usersearch_little():
     form = SearchBar()
     if form.validate_on_submit():
@@ -922,6 +932,7 @@ def usersearch_little():
         return render_template("usersearchlittle.html", form = form)
 
 @app.route("/findpairing", methods = ['GET', 'POST'])
+@login_required
 def find_pairing():
     form = SearchBar()
     if form.validate_on_submit():
@@ -1038,10 +1049,12 @@ def reset_token(token):
     return render_template('reset_token.html', title = 'Reset Password', form = form)
 
 @app.route("/adminhome", methods = ['GET', 'POST'])
+@login_required
 def admin_home():
     return render_template("adminhome.html")
 
 @app.route("/topthree", methods = ['GET', 'POST'])
+@login_required
 def top_three():
     if str(current_user.submitted_picture) == str("True"):
         form = ThreeForm()
@@ -1154,7 +1167,6 @@ class LoginForm(FlaskForm):
     email = StringField("Email", validators = [DataRequired()])
     password = PasswordField("Password", validators = [DataRequired()])
     submit = SubmitField("Submit")
-
 
 class RegistrationForm(FlaskForm):
     first_name = StringField('First Name', validators = [DataRequired(), Length(min = 2, max = 30)])
@@ -1387,7 +1399,6 @@ class ProfileForm(FlaskForm):
     gender = SelectField("Gender (will not be part of public profile)", validators = [Length(min = 0, max = 100)], choices = [("Select", "Select"), ("Male", "Male"), ("Female", "Female"), ("Other", "Other")])
     submit = SubmitField("Save and/or Submit")
 
-
 class TextBox(FlaskForm):
     textbox = TextAreaField("", render_kw={"rows": 5, "cols": 0})
 
@@ -1403,7 +1414,6 @@ class UpdatePicture(FlaskForm):
 class SearchBar(FlaskForm):
     search = StringField("Search", validators = [DataRequired()])
     submit = SubmitField("Submit")
-
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
@@ -1435,8 +1445,6 @@ class User(db.Model, UserMixin):
         except:
             return None
         return User.query.get(user_id)
-
-
 
 class LittleData(little_db.Model):
     id = little_db.Column(little_db.Integer, primary_key = True)
@@ -1564,11 +1572,18 @@ class ThreeData(three_db.Model):
     third = three_db.Column(three_db.String(50))
     email = three_db.Column(three_db.String(100))
 
-
+'''
 class PairingForm(FlaskForm):
     little_a = SelectField("Little A", choices = name_list)
     little_b = SelectField("Little B", choices = name_list)
     little_c = SelectField("Little C", choices = name_list)
+    submit = SubmitField("Save/Submit Pairing")
+'''
+
+class PairingForm(FlaskForm):
+    little_a = SelectField("Little A")
+    little_b = SelectField("Little B")
+    little_c = SelectField("Little C")
     submit = SubmitField("Save/Submit Pairing")
 
 class RequestResetForm(FlaskForm):
