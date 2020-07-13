@@ -677,7 +677,7 @@ def big_profile_all(email_string):
 def little_profile_all(email_string):
     little_data = LittleData.query.filter_by(email = email_string).first()
     little_profile = ProfileData.query.filter_by(vt_email = email_string).first()
-    three_data = ThreeData.query.filter_By(email = email_string).first()
+    three_data = ThreeData.query.filter_by(email = email_string).first()
     form = AllLittleForm()
     if little_data is not None:
         form.one.data = little_data.one

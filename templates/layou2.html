@@ -58,6 +58,7 @@
             {% endif %}
             {% if current_user.is_authenticated %}
                 {% if current_user.kind == "Big" %}
+                        <br>
                 <li class="nav-item">
                   <a class="nav-link" href="/bigapplication">Modify Big Application</a>
               </li>
@@ -67,7 +68,9 @@
                         <li class="nav-item">
                   <a class="nav-link" href="/bigalerts">Alerts</a>
               </li>
+                        <br>
             {% else %}
+                        <br>
                 <li class="nav-item">
                   <a class="nav-link" href="/littleapplication">Modify Little Application</a>
               </li>
@@ -77,6 +80,7 @@
                         <li class="nav-item">
                   <a class="nav-link" href="/littlealerts">Alerts</a>
               </li>
+                        <br>
             {% endif%}
                         {% if current_user.submitted_application == "True" %}
                             <li class="nav-item">
@@ -85,11 +89,13 @@
                         <li class="nav-item">
                               <a class="nav-link" href="/viewprofile">View Profile</a>
                           </li>
+                        <br>
                         {% endif %}
                         {% if current_user.submitted_profile == "True" %}
                             <li class="nav-item">
                                   <a class="nav-link" href="/updatepicture">Update Picture</a>
                               </li>
+                        <br>
                         {% endif %}
             <li class="nav-item">
                   <a class="nav-link" href="/bigmales">Big Males</a>
@@ -97,18 +103,21 @@
             <li class="nav-item">
                   <a class="nav-link" href="/bigfemales">Big Females</a>
               </li>
+                        <br>
             <li class="nav-item">
                   <a class="nav-link" href="/littlemales">Little Males</a>
               </li>
             <li class="nav-item">
                   <a class="nav-link" href="/littlefemales">Little Females</a>
               </li>
+                        <br>
                         <li class="nav-item">
                   <a class="nav-link" href="/usersearchbig">Search Bigs</a>
               </li>
             <li class="nav-item">
                   <a class="nav-link" href="/usersearchlittle">Search Littles</a>
               </li>
+                        <br>
                         <li class="nav-item">
                   <a class="nav-link" href="/logout">Logout</a>
               </li>
