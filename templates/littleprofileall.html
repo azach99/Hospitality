@@ -121,9 +121,8 @@
                 {{ form.twentythree(class = "form-control form-control-lg")}}
             </div>
 
-
-
-            <h1>{{ profile_data.name }}</h1>
+        <h1>Profile</h1>
+            <h2>{{ profile_data.name }}</h2>
             <h5>Username: {{ profile_data.username }}</h5>
             <h5>Instagram: {{ profile_data.instagram }}</h5>
             <h5>Twitter: {{ profile_data.twitter }}</h5>
@@ -135,6 +134,12 @@
                 {{ form.textbox.label(class = "form-control-label") }}
                 {{ form.textbox(class = "form-control form-control-lg")}}
             </div>
+
+            <h1>Preferences</h1>
+            <h5>First Choice: {{ three_data.first }}</h5>
+            <h5>Second Choice: {{ three_data.second }}</h5>
+            <h5>Third Choice: {{ three_data.third }}</h5>
+
         </center>
 
 

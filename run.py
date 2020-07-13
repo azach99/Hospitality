@@ -26,6 +26,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///profile_data.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///picture_data.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pairing_data.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///alert_data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///three_data.db'
 
 db = SQLAlchemy(app)
 little_db = SQLAlchemy(app)
@@ -34,6 +35,7 @@ profile_db = SQLAlchemy(app)
 picture_db = SQLAlchemy(app)
 pairing_db = SQLAlchemy(app)
 alert_db = SQLAlchemy(app)
+three_db = SQLAlchemy(app)
 
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
@@ -78,18 +80,17 @@ def restart():
     pairing_db.create_all()
     alert_db.drop_all()
     alert_db.create_all()
+    three_db.drop_all()
+    three_db.create_all()
     admin_user = User(first_name = "Admin", last_name = "Admin", username = "admin",
                       email = "admin@vt.edu", kind = "Big", password = "@admin21",
                       key = secret_function())
     db.session.add(admin_user)
     db.session.commit()
 
-
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
 
 @app.route("/", methods = ['GET', 'POST'])
 def home():
@@ -114,12 +115,16 @@ def login():
         if (user and bcrypt.check_password_hash(user.password, form.password.data)):
             login_user(user)
             flash('Login Successful', category="success")
-            return redirect(url_for('home'))
+            return redirect(url_for('user_home'))
         else:
             flash('Login Unsuccessful', category="danger")
             return redirect(url_for('login'))
     else:
         return render_template('login.html', title="Login", form=form)
+
+@app.route("/userhome", methods = ['GET', 'POST'])
+def user_home():
+    return render_template("userhome.html")
 
 @app.route("/about")
 def about():
@@ -186,7 +191,7 @@ def little_apply():
         db.session.add(enter)
         db.session.commit()
         flash("Saved Application for {}".format(form.name.data), 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('user_home'))
     else:
         '''if the current users email is in little_db, find that specific user and set the form fields to that users (credentials)'''
         q = LittleData.query.filter_by(email = current_user.email).first()
@@ -263,7 +268,7 @@ def big_apply():
         db.session.add(enter)
         db.session.commit()
         flash("Saved Application for {}".format(form.name.data), 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('user_home'))
     else:
         '''if the current users email is in big_db, find that specific user and set the form fields to that users (credentials)'''
         q = BigData.query.filter_by(email=current_user.email).first()
@@ -672,6 +677,7 @@ def big_profile_all(email_string):
 def little_profile_all(email_string):
     little_data = LittleData.query.filter_by(email = email_string).first()
     little_profile = ProfileData.query.filter_by(vt_email = email_string).first()
+    three_data = ThreeData.query.filter_By(email = email_string).first()
     form = AllLittleForm()
     if little_data is not None:
         form.one.data = little_data.one
@@ -697,7 +703,7 @@ def little_profile_all(email_string):
         form.twentythree.data = little_data.twentythree
     if little_profile is not None:
         form.textbox.data = little_profile.bio
-    return render_template("littleprofileall.html", form = form, little_data = little_data, profile_data = little_profile)
+    return render_template("littleprofileall.html", form = form, little_data = little_data, profile_data = little_profile, three_data = three_data)
 
 
 def secret_function():
@@ -750,7 +756,7 @@ def profile():
             db.session.add(enter)
             db.session.commit()
             flash("Updated Profile", 'success')
-            return redirect(url_for("home"))
+            return redirect(url_for("user_home"))
         else:
             q = ProfileData.query.filter_by(vt_email=current_user.email).first()
             if (q is not None):
@@ -1009,6 +1015,31 @@ def reset_token(token):
 def admin_home():
     return render_template("adminhome.html")
 
+@app.route("/topthree", methods = ['GET', 'POST'])
+def top_three():
+    if str(current_user.submitted_picture) == str("True"):
+        form = ThreeForm()
+        if form.validate_on_submit():
+            q = ThreeData.query.filter_by(email = current_user.email).first()
+            if (q is not None):
+                ThreeData.query.filter_by(email = current_user.email).delete()
+            input_three = ThreeData(first = form.first.data, second = form.second.data,
+                                    third = form.third.data, email = current_user.email)
+            three_db.session.add(input_three)
+            three_db.session.commit()
+            flash("Your Three Preferred bigs have been saved!", "success")
+            return redirect(url_for("user_home"))
+        else:
+            q = ThreeData.query.filter_by(email=current_user.email).first()
+            if (q is not None):
+                form.first.data = q.first
+                form.second.data = q.second
+                form.third.data = q.third
+            return render_template("three.html", form = form)
+    else:
+        flash("You must submit your picture before you can choose your Three Preferred Bigs", "danger")
+        return redirect(url_for("update_picture"))
+
 @app.route("/logout")
 def logout():
     logout_user()
@@ -1119,6 +1150,12 @@ class RegistrationForm(FlaskForm):
         email_string = User.query.filter_by(email = email.data).first()
         if email_string:
             raise ValidationError('That email is taken. Please choose a different one.')
+
+class ThreeForm(FlaskForm):
+    first = StringField("First Choice", validators = [Length(min = 2, max = 50)])
+    second = StringField("Second Choice", validators = [Length(min = 2, max = 50)])
+    third = StringField("Third Choice", validators = [Length(min = 2, max = 50)])
+    submit = SubmitField("Save/Submit")
 
 class AdminLoginForm(FlaskForm):
     email_correct = "admin@vt.edu"
@@ -1493,6 +1530,13 @@ class AlertData(alert_db.Model):
     id = alert_db.Column(alert_db.Integer, primary_key = True)
     content = alert_db.Column(db.String(1000))
     kind = alert_db.Column(db.String(100))
+
+class ThreeData(three_db.Model):
+    id = three_db.Column(three_db.Integer, primary_key = True)
+    first = three_db.Column(three_db.String(50))
+    second = three_db.Column(three_db.String(50))
+    third = three_db.Column(three_db.String(50))
+    email = three_db.Column(three_db.String(100))
 
 
 class PairingForm(FlaskForm):
