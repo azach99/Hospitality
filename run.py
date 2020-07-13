@@ -130,6 +130,32 @@ def user_home():
 def about():
     return render_template("about.html")
 
+@app.route("/unpairedbigs", methods = ['GET', 'POST'])
+def unpaired_bigs():
+    unpaired_names = []
+    all_bigs = BigData.query.all()
+    for user in all_bigs:
+        email = user.email
+        q = PairingData.query.filter_by(big_email = email).first()
+        if q is None:
+            name = user.name
+            unpaired_names.append(name)
+    return render_template("unpaired.html", unpaired_names = unpaired_names, tag = "Big")
+
+@app.route("/unpairedlittles", methods = ['GET', 'POST'])
+def unpaired_littles():
+    unpaired_names = []
+    all_littles = LittleData.query.all()
+    for user in all_littles:
+        email = user.email
+        a = PairingData.query.filter_by(little_email_one = email).first()
+        b = PairingData.query.filter_by(little_email_two = email).first()
+        c = PairingData.query.filter_by(little_email_three = email).first()
+        if a is None and b is None and c is None:
+            name = user.name
+            unpaired_names.append(name)
+    return render_template("unpaired.html", unpaired_names = unpaired_names, tag = "Little")
+
 @app.route("/register", methods = ['GET', 'POST'])
 def register():
     form = RegistrationForm()

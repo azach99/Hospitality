@@ -1,0 +1,31 @@
+{% extends "adminlayout.html" %}
+{% block content %}
+<center>
+    {% if tag == "Big" %}
+        <h1>Unpaired Bigs</h1>
+    {% else %}
+        <h1>Unpaired Littles</h1>
+    {% endif %}
+    <br>
+    <br>
+
+
+
+
+    {% for user in unpaired_names %}
+        <center>
+            <div class = "row">
+                <div class = "col-sm">
+                    <h5>{{ user }}</h5>
+                    </div>
+            </div>
+        </center>
+    {% endfor %}
+
+
+    <br>
+    <br>
+    <br>
+</center>
+
+{% endblock content %}
